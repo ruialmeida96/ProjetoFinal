@@ -239,7 +239,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="jTextField3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="teste"/>
+        <Property name="text" type="java.lang.String" value="teste1"/>
       </Properties>
     </Component>
   </SubComponents>
