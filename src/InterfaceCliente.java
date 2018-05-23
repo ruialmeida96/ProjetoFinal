@@ -23,7 +23,7 @@ public class InterfaceCliente extends javax.swing.JFrame {
         initComponents();
      
         
-        //rui
+        //rui2
         
         
     }
@@ -120,7 +120,7 @@ public class InterfaceCliente extends javax.swing.JFrame {
             }
         });
 
-        jTextField3.setText("teste pcrui");
+        jTextField3.setText("teste pcrui2");
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
