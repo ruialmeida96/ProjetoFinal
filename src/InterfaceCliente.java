@@ -24,6 +24,8 @@ public class InterfaceCliente extends javax.swing.JFrame {
      
         
         
+        
+        
     }
 
     /**
