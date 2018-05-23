@@ -116,7 +116,7 @@ public class InterfaceCliente extends javax.swing.JFrame {
             }
         });
 
-        jTextField3.setText("teste1");
+        jTextField3.setText("teste 2 rui");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
