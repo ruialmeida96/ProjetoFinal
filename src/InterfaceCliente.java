@@ -21,7 +21,9 @@ public class InterfaceCliente extends javax.swing.JFrame {
      */
     public InterfaceCliente() {
         initComponents();
-         
+     
+        
+        
     }
 
     /**
