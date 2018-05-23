@@ -23,7 +23,7 @@ public class InterfaceCliente extends javax.swing.JFrame {
         initComponents();
      
         
-        //a
+        //b
         
         
     }
