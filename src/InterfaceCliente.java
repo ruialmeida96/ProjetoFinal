@@ -189,7 +189,7 @@ public class InterfaceCliente extends javax.swing.JFrame {
          
     }//GEN-LAST:event_cadeira1ActionPerformed
 
-    /**
+    /**a
      * @param args the command line arguments
      */
     public static void main(String args[]) {
