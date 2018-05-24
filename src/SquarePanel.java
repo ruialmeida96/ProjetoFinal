@@ -47,6 +47,10 @@ public class SquarePanel extends JPanel{
     public void setPiece(int color, int type){
     	imageLabel.setIcon(new ImageIcon(pieceImage[color][type]));
     }
+    
+    public Image getPiece(int x,int y){
+        return pieceImage[color][type];
+    }
 
     public void removePiece(){
     	imageLabel.setIcon(null);
@@ -63,7 +67,7 @@ public class SquarePanel extends JPanel{
             //repaint();
         }
 
-        public void mousePressed(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {       
         	cg.selected(row, column);
         	setBorder(BorderFactory.createLineBorder(Color.RED, 2));
         }
