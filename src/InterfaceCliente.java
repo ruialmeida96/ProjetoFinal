@@ -1,23 +1,28 @@
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.lang.reflect.Array;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 
 public class InterfaceCliente extends javax.swing.JFrame {
 
     private ImageIcon imgSair;
     private SquarePanel[][] board = new SquarePanel[9][9];
+    private SquarePanel[][] boardpecas = new SquarePanel[8][4];
 
     public InterfaceCliente() {
         initComponents();
         PanelTabuleiro.setLayout(new GridLayout(8,8));
-        PanelPecas.setLayout(new GridLayout(4,8));
+        PanelPecas.setLayout(new GridLayout(8,4));
         String[] letras = {"a","b","c","d","e","f","g","h"};
         
         SquarePanel.loadPieceImages();
-        
+        //for tabuleiro
         for (int i = 8; i >= 1; i--){
         	for (int j = 1; j < 9; j++){
                 SquarePanel sqPanel = new SquarePanel(i,letras[j-1],this);
@@ -27,6 +32,18 @@ public class InterfaceCliente extends javax.swing.JFrame {
                 PanelTabuleiro.add(sqPanel);
         	}
         }
+        //for peças fora de jogo
+        for (int i = 0; i < 8; i++){
+        	for (int j = 0; j < 4; j++){
+                SquarePanel sqPanel = new SquarePanel(i,letras[j],this);
+                boardpecas[i][j] = sqPanel;
+                PanelPecas.add(sqPanel);
+        	}
+        }
+        //borda verde de peças fora de jogo
+        Border lineBorder = BorderFactory.createLineBorder(Color.DARK_GRAY);
+        TitledBorder title = BorderFactory.createTitledBorder(lineBorder);
+        PanelPecas.setBorder(title);
         
         add(PanelTabuleiro,BorderLayout.CENTER);
         
