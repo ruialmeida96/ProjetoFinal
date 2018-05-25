@@ -2,7 +2,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.lang.reflect.Array;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,12 +13,19 @@ public class InterfaceCliente extends javax.swing.JFrame {
     private ImageIcon imgSair;
     private SquarePanel[][] board = new SquarePanel[9][9];
     private SquarePanel[][] boardpecas = new SquarePanel[8][4];
+    private String [][] tipoCor =new String [9][9];
+    private String [][] tipoCorTabuleiroFantasma =new String [8][4];
+    private String[] letras = {"a","b","c","d","e","f","g","h"};
+    private String[] letras2 = {"i","j","k","l"};
 
+    private int jog1=-1;
+    private String jog1s=null;
+    
     public InterfaceCliente() {
         initComponents();
+        colocaPecaTipoCor();
         PanelTabuleiro.setLayout(new GridLayout(8,8));
         PanelPecas.setLayout(new GridLayout(8,4));
-        String[] letras = {"a","b","c","d","e","f","g","h"};
         
         SquarePanel.loadPieceImages();
         //for tabuleiro
@@ -35,7 +41,7 @@ public class InterfaceCliente extends javax.swing.JFrame {
         //for peças fora de jogo
         for (int i = 0; i < 8; i++){
         	for (int j = 0; j < 4; j++){
-                SquarePanel sqPanel = new SquarePanel(i,letras[j],this);
+                SquarePanel sqPanel = new SquarePanel(i,letras2[j],this);
                 boardpecas[i][j] = sqPanel;
                 PanelPecas.add(sqPanel);
         	}
@@ -258,13 +264,15 @@ public class InterfaceCliente extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(LabelJogador2)
-                                        .addGap(84, 84, 84)
-                                        .addComponent(BotaoSentar2))
+                                        .addGap(41, 41, 41)
+                                        .addComponent(BotaoSentar2)
+                                        .addGap(43, 43, 43))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(LabelJogador1)
-                                        .addGap(89, 89, 89)
-                                        .addComponent(BotaoSentar1)))))))
-                .addGap(39, 39, 39)
+                                        .addGap(54, 54, 54)
+                                        .addComponent(BotaoSentar1)
+                                        .addGap(35, 35, 35)))))))
+                .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(85, 85, 85)
@@ -273,7 +281,7 @@ public class InterfaceCliente extends javax.swing.JFrame {
                         .addComponent(BotaoSair)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 49, Short.MAX_VALUE)
+                        .addGap(0, 88, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel5)
@@ -331,9 +339,9 @@ public class InterfaceCliente extends javax.swing.JFrame {
                                     .addComponent(PanelPecas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(BotaoSentar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(LabelJogador2))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(LabelJogador2)
+                                .addComponent(BotaoSentar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(BotaoOrdenar))
                         .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
@@ -344,6 +352,88 @@ public class InterfaceCliente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void colocaPecaTipoCor(){
+        //linha primeira de baixo, peças brancas
+        tipoCor[8][1]="31";
+        tipoCor[8][2]="11";
+        tipoCor[8][3]="21";
+        tipoCor[8][4]="41";
+        tipoCor[8][5]="51";
+        tipoCor[8][6]="21";
+        tipoCor[8][7]="11";
+        tipoCor[8][8]="31";
+                
+        //segunda linha de baixo, peças brancas
+        tipoCor[7][1]="01";
+        tipoCor[7][2]="01";
+        tipoCor[7][3]="01";
+        tipoCor[7][4]="01";
+        tipoCor[7][5]="01";
+        tipoCor[7][6]="01";
+        tipoCor[7][7]="01";
+        tipoCor[7][8]="01";
+        
+        
+        //primeira linha de cima, peças pretas
+        tipoCor[1][1]="30";
+        tipoCor[1][2]="10";
+        tipoCor[1][3]="20";
+        tipoCor[1][4]="40";
+        tipoCor[1][5]="50";
+        tipoCor[1][6]="20";
+        tipoCor[1][7]="10";
+        tipoCor[1][8]="30";
+      
+       //segunda linha cima, peças pretas
+        tipoCor[2][1]="00";
+        tipoCor[2][2]="00";
+        tipoCor[2][3]="00";
+        tipoCor[2][4]="00";
+        tipoCor[2][5]="00";
+        tipoCor[2][6]="00";
+        tipoCor[2][7]="00";
+        tipoCor[2][8]="00";
+    }
+    public int stringNumero(String letra){
+        if(letra.equals("a")) return 1;
+        if(letra.equals("b")) return 2;
+        if(letra.equals("c")) return 3;
+        if(letra.equals("d")) return 4;
+        if(letra.equals("e")) return 5;
+        if(letra.equals("f")) return 6;
+        if(letra.equals("g")) return 7;
+        if(letra.equals("h")) return 8;
+        
+        return 0;
+    }
+       public int stringNumero2(String letra){
+        if(letra.equals("i")) return 0;
+        if(letra.equals("j")) return 1;
+        if(letra.equals("k")) return 2;
+        if(letra.equals("l")) return 3;
+       
+        return -1;
+    }
+    
+    public int []tipoCorF(String peca){
+        int [] tipocor=new int [2];
+        tipocor[0]=Integer.parseInt(""+peca.charAt(1));
+        tipocor[1]=Integer.parseInt(""+peca.charAt(0));
+        return tipocor;
+    }
+    public void colocaPecaTabuleiroFantasma(String peca) {
+        int[] cortipo = tipoCorF(peca);
+        int valor=0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (tipoCorTabuleiroFantasma[i][j]==null && valor==0){
+                    boardpecas[i][j].setPiece(cortipo[0],cortipo[1]);
+                    tipoCorTabuleiroFantasma[i][j]=peca;
+                    valor=1;
+                }
+            }
+        }
+    }
     private void BotaoSentar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSentar1ActionPerformed
         // TODO add your handling code here:
         imgSair = new ImageIcon("entracadeira.png");
@@ -353,7 +443,45 @@ public class InterfaceCliente extends javax.swing.JFrame {
 
     
     public void selected(int x, String y){
-    	System.out.printf("mouse pressed at:"+x+", "+y+"\n");
+        if(jog1==-1){
+            if(stringNumero(y)!=0){
+            if(tipoCor[x][stringNumero(y)]!=null ){
+                jog1=x;
+                jog1s=y;
+            }
+            }else{
+            if(tipoCorTabuleiroFantasma[x][stringNumero2(y)]!=null ){
+                jog1=x;
+                jog1s=y;
+            }
+            }
+        }else{
+            if(stringNumero(y)!=0){
+                String name=null;
+                System.out.println(y);
+            //vai buscar o tipo e cor da peça na primeira posição "0b"
+            if(stringNumero(jog1s)!=0) name = tipoCor[jog1][stringNumero(jog1s)];
+            else name = tipoCorTabuleiroFantasma[jog1][stringNumero2(jog1s)];
+
+            int[] cortipo = tipoCorF(name);
+            //mete no tanuleiro visivel a peça no lugar onde queriamos
+            board[x][stringNumero(y)].setPiece(cortipo[0],cortipo[1]);
+            // se o destino tiver uma peça, temos de passar essa peça para o tabuleiro de fora
+            if(tipoCor[x][stringNumero(y)]!=null && (jog1!=x || !jog1s.equals(y)))colocaPecaTabuleiroFantasma(tipoCor[x][stringNumero(y)]);
+            //muda no tabuleiro fantasma a peça para onde queriamos
+            if(stringNumero(jog1s)!=0)tipoCor[x][stringNumero(y)]=tipoCor[jog1][stringNumero(jog1s)];
+            else tipoCor[x][stringNumero(y)]=tipoCorTabuleiroFantasma[jog1][stringNumero2(jog1s)];
+            //remove no tabuleiro fantasma a primeira peça clicada
+            if(stringNumero(jog1s)!=0)if(jog1!=x || !jog1s.equals(y))tipoCor[jog1][stringNumero(jog1s)]=null;
+            if(stringNumero2(jog1s)!=-1) if(jog1!=x || !jog1s.equals(y))tipoCorTabuleiroFantasma[jog1][stringNumero2(jog1s)]=null;
+            //remove a peça no tabuleiro visivel
+            if(stringNumero(jog1s)!=0)if(jog1!=x || !jog1s.equals(y))board[jog1][stringNumero(jog1s)].removePiece();
+            if(stringNumero2(jog1s)!=-1)if(jog1!=x || !jog1s.equals(y))boardpecas[jog1][stringNumero2(jog1s)].removePiece();
+            }
+            jog1=-1;
+            jog1s=null;
+            
+            }
     }
     
     private void BotaoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoEnviarMsgActionPerformed
