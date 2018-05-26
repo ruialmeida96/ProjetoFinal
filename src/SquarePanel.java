@@ -1,4 +1,4 @@
-import java.awt.*;
+ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -48,9 +48,7 @@ public class SquarePanel extends JPanel{
     	imageLabel.setIcon(new ImageIcon(pieceImage[color][type]));
     }
     
-    public Image getPiece(int x,int y){
-        return pieceImage[color][type];
-    }
+  
 
     public void removePiece(){
     	imageLabel.setIcon(null);

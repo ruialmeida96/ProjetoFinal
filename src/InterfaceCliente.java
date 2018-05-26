@@ -483,7 +483,7 @@ public class InterfaceCliente extends javax.swing.JFrame {
             
             }
     }
-    
+     
     private void BotaoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoEnviarMsgActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BotaoEnviarMsgActionPerformed
