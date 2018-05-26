@@ -567,6 +567,7 @@ public class InterfaceCliente extends javax.swing.JFrame {
         pecasDefault();
         
         //falta colocar a parte de retirar as peças que tinha dentro do painel das peças
+        //estava a trabalhar aqui
         
     }//GEN-LAST:event_BotaoOrdenarActionPerformed
 
