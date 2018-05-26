@@ -56,46 +56,8 @@ public class InterfaceCliente extends javax.swing.JFrame {
         PanelPecas.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.DARK_GRAY)));
 
         add(PanelTabuleiro, BorderLayout.CENTER);
-
-        //linha primeira de baixo, peças brancas
-        board[8][1].setPiece(1, 3);
-        board[8][2].setPiece(1, 1);
-        board[8][3].setPiece(1, 2);
-        board[8][4].setPiece(1, 4);
-        board[8][5].setPiece(1, 5);
-        board[8][6].setPiece(1, 2);
-        board[8][7].setPiece(1, 1);
-        board[8][8].setPiece(1, 3);
-
-        //segunda linha de baixo, peças brancas
-        board[7][1].setPiece(1, 0);
-        board[7][2].setPiece(1, 0);
-        board[7][3].setPiece(1, 0);
-        board[7][4].setPiece(1, 0);
-        board[7][5].setPiece(1, 0);
-        board[7][6].setPiece(1, 0);
-        board[7][7].setPiece(1, 0);
-        board[7][8].setPiece(1, 0);
-
-        //primeira linha de cima, peças pretas
-        board[1][1].setPiece(0, 3);
-        board[1][2].setPiece(0, 1);
-        board[1][3].setPiece(0, 2);
-        board[1][4].setPiece(0, 4);
-        board[1][5].setPiece(0, 5);
-        board[1][6].setPiece(0, 2);
-        board[1][7].setPiece(0, 1);
-        board[1][8].setPiece(0, 3);
-
-        //segunda linha cima, peças pretas
-        board[2][1].setPiece(0, 0);
-        board[2][2].setPiece(0, 0);
-        board[2][3].setPiece(0, 0);
-        board[2][4].setPiece(0, 0);
-        board[2][5].setPiece(0, 0);
-        board[2][6].setPiece(0, 0);
-        board[2][7].setPiece(0, 0);
-        board[2][8].setPiece(0, 0);
+        
+        pecasDefault();
 
     }
 
@@ -184,6 +146,11 @@ public class InterfaceCliente extends javax.swing.JFrame {
         LabelJogador2.setText("Nome Jogador 2");
 
         BotaoOrdenar.setText("Ordenar Tabuleiro");
+        BotaoOrdenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotaoOrdenarActionPerformed(evt);
+            }
+        });
 
         BotaoEnviarMsg.setText("Enviar");
         BotaoEnviarMsg.setToolTipText("");
@@ -391,6 +358,48 @@ public class InterfaceCliente extends javax.swing.JFrame {
         tipoCor[2][7] = "00";
         tipoCor[2][8] = "00";
     }
+    
+    public void pecasDefault(){
+        //linha primeira de baixo, peças brancas
+        board[8][1].setPiece(1, 3);
+        board[8][2].setPiece(1, 1);
+        board[8][3].setPiece(1, 2);
+        board[8][4].setPiece(1, 4);
+        board[8][5].setPiece(1, 5);
+        board[8][6].setPiece(1, 2);
+        board[8][7].setPiece(1, 1);
+        board[8][8].setPiece(1, 3);
+
+        //segunda linha de baixo, peças brancas
+        board[7][1].setPiece(1, 0);
+        board[7][2].setPiece(1, 0);
+        board[7][3].setPiece(1, 0);
+        board[7][4].setPiece(1, 0);
+        board[7][5].setPiece(1, 0);
+        board[7][6].setPiece(1, 0);
+        board[7][7].setPiece(1, 0);
+        board[7][8].setPiece(1, 0);
+
+        //primeira linha de cima, peças pretas
+        board[1][1].setPiece(0, 3);
+        board[1][2].setPiece(0, 1);
+        board[1][3].setPiece(0, 2);
+        board[1][4].setPiece(0, 4);
+        board[1][5].setPiece(0, 5);
+        board[1][6].setPiece(0, 2);
+        board[1][7].setPiece(0, 1);
+        board[1][8].setPiece(0, 3);
+
+        //segunda linha cima, peças pretas
+        board[2][1].setPiece(0, 0);
+        board[2][2].setPiece(0, 0);
+        board[2][3].setPiece(0, 0);
+        board[2][4].setPiece(0, 0);
+        board[2][5].setPiece(0, 0);
+        board[2][6].setPiece(0, 0);
+        board[2][7].setPiece(0, 0);
+        board[2][8].setPiece(0, 0);
+    }
 
     public int stringNumero(String letra) {
         if (letra.equals("a")) {
@@ -550,6 +559,16 @@ public class InterfaceCliente extends javax.swing.JFrame {
     private void TextNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TextNomeActionPerformed
+
+    private void BotaoOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoOrdenarActionPerformed
+        // TODO add your handling code here:
+        //parte de ordenar o tabuleiro todo
+        colocaPecaTipoCor();
+        pecasDefault();
+        
+        //falta colocar a parte de retirar as peças que tinha dentro do painel das peças
+        
+    }//GEN-LAST:event_BotaoOrdenarActionPerformed
 
     public static void main(String args[]) {
 
