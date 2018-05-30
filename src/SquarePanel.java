@@ -7,7 +7,7 @@ public class SquarePanel extends JPanel {
 
     private int row;
     String column;
-    private InterfaceCliente cg;
+    private Cliente cg;
     private JLabel imageLabel;
     private static Image pieceImage[][] = new Image[2][6];
     private static String imageFilename[][] = {
@@ -17,7 +17,7 @@ public class SquarePanel extends JPanel {
     //colors: 0 - white; 1 - black;
     //pieces: 0 - pawn(pe�o); 1 - knight(cavalo); 2 - bishop(bispo)
     //        3 - rook(torre); 4 - queen(rainha); 5 - king(rei)
-    public SquarePanel(int x, String y, InterfaceCliente c) {
+    public SquarePanel(int x, String y, Cliente c) {
         row = x;
         column = y;
         cg = c;
