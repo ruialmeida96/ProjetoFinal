@@ -25,6 +25,7 @@ public class InterfaceCliente extends javax.swing.JFrame {
 
     public InterfaceCliente() {
         initComponents();
+        botoesinicio();
         colocaPecaTipoCor();
         PanelTabuleiro.setLayout(new GridLayout(8, 8));
         PanelPecas.setLayout(new GridLayout(8, 4));
@@ -317,6 +318,16 @@ public class InterfaceCliente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void botoesinicio(){
+        BotaoSair.setEnabled(false);
+        BotaoSentar1.setEnabled(false);
+        BotaoSentar2.setEnabled(false);
+        BotaoEnviarMsg.setEnabled(false);
+        BotaoObservador.setEnabled(false);
+        BotaoOrdenar.setEnabled(false);
+       // PanelTabuleiro.setEnabled(false);
+    }
+    
     private void colocaPecaTipoCor() {
         //linha primeira de baixo, peças brancas
         tipoCor[8][1] = "31";
