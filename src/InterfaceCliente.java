@@ -360,6 +360,17 @@ public class InterfaceCliente extends javax.swing.JFrame {
     }
     
     public void pecasDefault(){
+         for (int i = 8; i >= 1; i--) {
+            for (int j = 1; j < 9; j++) {
+                board[i][j].removePiece();
+            }
+        }
+          for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 4; j++) {
+                boardpecas[i][j].removePiece();
+                tipoCorTabuleiroFantasma[i][j]=null;
+            }
+        }
         //linha primeira de baixo, peças brancas
         board[8][1].setPiece(1, 3);
         board[8][2].setPiece(1, 1);
