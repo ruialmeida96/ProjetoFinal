@@ -13,6 +13,7 @@ import javax.swing.border.TitledBorder;
 public class InterfaceCliente extends javax.swing.JFrame {
 
     private ImageIcon imgSair;
+    private SquarePanel busca=new SquarePanel(0,"",null);
     private SquarePanel[][] board = new SquarePanel[9][9];
     private SquarePanel[][] boardpecas = new SquarePanel[8][4];
     private String[][] tipoCor = new String[9][9];
@@ -512,8 +513,9 @@ public class InterfaceCliente extends javax.swing.JFrame {
         } else {
             if (stringNumero(y) != 0) {
                 String name = null;
-                System.out.println(y);
                 //vai buscar o tipo e cor da peça na primeira posição "0b"
+                board[jog1][stringNumero(jog1s)].setBorder(null);
+                System.out.println("InterfaceCliente.selected()");
                 if (stringNumero(jog1s) != 0) {
                     name = tipoCor[jog1][stringNumero(jog1s)];
                 } else {
@@ -555,11 +557,16 @@ public class InterfaceCliente extends javax.swing.JFrame {
                         boardpecas[jog1][stringNumero2(jog1s)].removePiece();
                     }
                 }
+
+                 if (stringNumero(jog1s) != 0) board[jog1][stringNumero(jog1s)].setBorder(null);
+                 //if (stringNumero(jog1s) != 0) board[x][stringNumero(y)].setBorder(null);
+
             }
             jog1 = -1;
             jog1s = null;
 
         }
+
     }
 
     private void BotaoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoEnviarMsgActionPerformed
