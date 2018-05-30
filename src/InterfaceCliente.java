@@ -13,7 +13,7 @@ import javax.swing.border.TitledBorder;
 public class InterfaceCliente extends javax.swing.JFrame {
 
     private ImageIcon imgSair;
-    private SquarePanel busca=new SquarePanel(0,"",null);
+    private SquarePanel busca = new SquarePanel(0, "", null);
     private SquarePanel[][] board = new SquarePanel[9][9];
     private SquarePanel[][] boardpecas = new SquarePanel[8][4];
     private String[][] tipoCor = new String[9][9];
@@ -32,7 +32,7 @@ public class InterfaceCliente extends javax.swing.JFrame {
         PanelPecas.setLayout(new GridLayout(8, 4));
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 
         SquarePanel.loadPieceImages();
         //for tabuleiro
@@ -58,7 +58,7 @@ public class InterfaceCliente extends javax.swing.JFrame {
         PanelPecas.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.DARK_GRAY)));
 
         add(PanelTabuleiro, BorderLayout.CENTER);
-        
+
         pecasDefault();
 
     }
@@ -319,16 +319,16 @@ public class InterfaceCliente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void botoesinicio(){
+    private void botoesinicio() {
         BotaoSair.setEnabled(false);
         BotaoSentar1.setEnabled(false);
         BotaoSentar2.setEnabled(false);
         BotaoEnviarMsg.setEnabled(false);
         BotaoObservador.setEnabled(false);
         BotaoOrdenar.setEnabled(false);
-       // PanelTabuleiro.setEnabled(false);
+        // PanelTabuleiro.setEnabled(false);
     }
-    
+
     private void colocaPecaTipoCor() {
         //linha primeira de baixo, peças brancas
         tipoCor[8][1] = "31";
@@ -370,17 +370,17 @@ public class InterfaceCliente extends javax.swing.JFrame {
         tipoCor[2][7] = "00";
         tipoCor[2][8] = "00";
     }
-    
-    public void pecasDefault(){
-         for (int i = 8; i >= 1; i--) {
+
+    public void pecasDefault() {
+        for (int i = 8; i >= 1; i--) {
             for (int j = 1; j < 9; j++) {
                 board[i][j].removePiece();
             }
         }
-          for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 4; j++) {
                 boardpecas[i][j].removePiece();
-                tipoCorTabuleiroFantasma[i][j]=null;
+                tipoCorTabuleiroFantasma[i][j] = null;
             }
         }
         //linha primeira de baixo, peças brancas
@@ -558,8 +558,10 @@ public class InterfaceCliente extends javax.swing.JFrame {
                     }
                 }
 
-                 if (stringNumero(jog1s) != 0) board[jog1][stringNumero(jog1s)].setBorder(null);
-                 //if (stringNumero(jog1s) != 0) board[x][stringNumero(y)].setBorder(null);
+                if (stringNumero(jog1s) != 0) {
+                    board[jog1][stringNumero(jog1s)].setBorder(null);
+                }
+                //if (stringNumero(jog1s) != 0) board[x][stringNumero(y)].setBorder(null);
 
             }
             jog1 = -1;
@@ -590,14 +592,10 @@ public class InterfaceCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_TextNomeActionPerformed
 
     private void BotaoOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoOrdenarActionPerformed
-        // TODO add your handling code here:
+
         //parte de ordenar o tabuleiro todo
         colocaPecaTipoCor();
         pecasDefault();
-        
-        //falta colocar a parte de retirar as peças que tinha dentro do painel das peças
-        //estava a trabalhar aqui
-        
     }//GEN-LAST:event_BotaoOrdenarActionPerformed
 
     public static void main(String args[]) {
