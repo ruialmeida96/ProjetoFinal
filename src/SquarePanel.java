@@ -9,7 +9,6 @@ public class SquarePanel extends JPanel{
     String column;
     private InterfaceCliente cg;
     private JLabel imageLabel;
-
     private static Image pieceImage[][] = new Image[2][6];
     private static String imageFilename[][] = {
         { "wp.gif", "wn.gif", "wb.gif", "wr.gif", "wq.gif", "wk.gif" },
@@ -36,6 +35,7 @@ public class SquarePanel extends JPanel{
             for (int j = 0; j < 6; j++)
                 pieceImage[i][j] = Toolkit.getDefaultToolkit().getImage("./src/images/" + imageFilename[i][j]);
     }
+    
 
     public void setBackColor(int color){
     	if(color==0)
@@ -48,26 +48,22 @@ public class SquarePanel extends JPanel{
     	imageLabel.setIcon(new ImageIcon(pieceImage[color][type]));
     }
     
-  
+
 
     public void removePiece(){
     	imageLabel.setIcon(null);
     }
 
-    class SquareMouseListener extends MouseAdapter {
-        public void mouseEntered(MouseEvent e) {
-            setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-            //repaint();
-        }
+    
 
+    class SquareMouseListener extends MouseAdapter {    
         public void mouseExited(MouseEvent e) {
             setBorder(null);
-            //repaint();
         }
-
-        public void mousePressed(MouseEvent e) {       
+        public void mousePressed(MouseEvent e) {
         	cg.selected(row, column);
         	setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+                
         }
 
 
