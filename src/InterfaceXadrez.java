@@ -15,7 +15,8 @@ import java.rmi.RemoteException;
  */
 public interface InterfaceXadrez extends Remote{
     
-   public Array[]  ordenaTabuleiro() throws RemoteException;
-   public Array[] jogada(int x,String y) throws RemoteException;
-    
+   public boolean ordenaTabuleiro() throws RemoteException;
+   public boolean jogada(int x,String y,int x2,String y2,String tipoCorPeca) throws RemoteException;
+   public String verificaCasa(int x,String y)throws RemoteException;
+   public void referenciaCliente (InterfaceCliente referencia) throws RemoteException;
 }
