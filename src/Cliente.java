@@ -4,19 +4,30 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.rmi.NotBoundException;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-public class Cliente extends javax.swing.JFrame {
+public class Cliente extends javax.swing.JFrame implements InterfaceCliente {
 
+    private String url = "127.0.0.1";
+    private Registry reg = null;
+    private Cliente client = null;
     private ImageIcon imgSair;
     private SquarePanel[][] board = new SquarePanel[9][9];
     private SquarePanel[][] boardpecas = new SquarePanel[8][4];
-    private String[][] tipoCor = new String[9][9];
-    private String[][] tipoCorTabuleiroFantasma = new String[8][4];
+    //private String[][] tipoCor = new String[9][9];
+    //private String[][] tipoCorTabuleiroFantasma = new String[8][4];
     private String[] letras = {"a", "b", "c", "d", "e", "f", "g", "h"};
     private String[] letras2 = {"i", "j", "k", "l"};
 
@@ -114,6 +125,11 @@ public class Cliente extends javax.swing.JFrame {
         });
 
         BotaoSair.setText("Sair");
+        BotaoSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotaoSairActionPerformed(evt);
+            }
+        });
 
         PanelTabuleiro.setBackground(new java.awt.Color(102, 102, 102));
         PanelTabuleiro.setForeground(new java.awt.Color(51, 51, 51));
@@ -580,7 +596,20 @@ public class Cliente extends javax.swing.JFrame {
     }//GEN-LAST:event_TextPortoActionPerformed
 
     private void BotaoEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoEntrarActionPerformed
-        // TODO add your handling code here:
+        try {
+            // formato URL de RMI: "//host:port/name"
+            //mostrar os nomes ativos       
+            String url = "127.0.0.1";
+            //cria o rmiregistry e retorna referencia para o registry no host e porto especificado
+            Registry reg = LocateRegistry.getRegistry(url, 1099);
+            Cliente client = new Cliente();
+            reg.rebind("consulta", (Remote) client);//indentificador do cliente remoto
+            //procura os objetos remotos registados, ao qual nos podemos ligar
+            InterfaceXadrez objRemoto = (InterfaceXadrez) reg.lookup("contador");           //pedir opcao
+            objRemoto.referenciaCliente(client);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }//GEN-LAST:event_BotaoEntrarActionPerformed
 
     private void TextNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextNomeActionPerformed
@@ -594,6 +623,17 @@ public class Cliente extends javax.swing.JFrame {
         pecasDefault();
     }//GEN-LAST:event_BotaoOrdenarActionPerformed
 
+    private void BotaoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSairActionPerformed
+        try {
+            reg.unbind("consulta");
+            UnicastRemoteObject.unexportObject((Remote) client, true);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+     }//GEN-LAST:event_BotaoSairActionPerformed
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -603,6 +643,7 @@ public class Cliente extends javax.swing.JFrame {
                 interf.setVisible(true);
             }
         });
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
