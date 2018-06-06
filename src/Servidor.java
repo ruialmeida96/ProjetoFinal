@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 /*
@@ -15,21 +16,28 @@ import javax.swing.ImageIcon;
  *
  * @author jessica
  */
-public class Servidor extends UnicastRemoteObject implements InterfaceXadrez {
+public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
 
     private ImageIcon imgSair;
     private static String[][] tipoCor = new String[9][9];
     private static String[][] tipoCorTabuleiroFantasma = new String[8][4];
     private String[] letras = {"a", "b", "c", "d", "e", "f", "g", "h"};
     private String[] letras2 = {"i", "j", "k", "l"};
+    private ArrayList<ExtendeUnicast> utilizadores =null;
 
-    Servidor() throws RemoteException {
+    Servidor() throws RemoteException  {
         super();
     }
 
     public boolean ordenaTabuleiro() throws RemoteException {
         ordena();
         //avisar todos os jogadores/observadores/CALLBACKS
+        return true;
+    }
+    public boolean referenciaJogador(ExtendeUnicast referencia) {
+    //adicionar jogador a um array
+        if(utilizadores==null)utilizadores=new ArrayList<ExtendeUnicast>();
+        utilizadores.add(referencia);
         return true;
     }
 
@@ -232,25 +240,25 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez {
 
         ordena();
         try {
-            // formato de URL para RMI: "//host:port/name"
-            // por omissao assume localhost e porto 1099
-            // igual a Naming.rebind("//localhost:1099/meuContador", serv);
-
-            Registry reg = LocateRegistry.createRegistry(1099);
+         // formato de URL para RMI: "//host:port/name"
+         // por omissao assume localhost e porto 1099
+         // igual a Naming.rebind("//localhost:1099/meuContador", serv);
+         
+         Registry reg = LocateRegistry.createRegistry(1099);
             Servidor serv = new Servidor();
-            //referência é registada para depois poder ser procurada.
-            reg.rebind("contador", serv);
+        //referência é registada para depois poder ser procurada.
+        reg.rebind("jogador",serv);
 
-            System.out.println("servidor RMI iniciado");
-            
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+         System.out.println("servidor RMI iniciado");
+        
+      }
+      catch (Exception e) {
+         System.out.println(e);
+      }
+        
     }
 
     
-    public void referenciaCliente(InterfaceCliente referencia) {
-        //adicionar jogador a um array
-    }
+   
 
 }

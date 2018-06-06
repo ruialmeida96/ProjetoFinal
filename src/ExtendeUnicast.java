@@ -1,5 +1,6 @@
 
-import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -11,7 +12,8 @@ import java.rmi.Remote;
  *
  * @author jessica
  */
-public interface InterfaceCliente extends Remote{
-    
-    
+public class ExtendeUnicast extends UnicastRemoteObject{
+    ExtendeUnicast() throws RemoteException {
+        super();
+    }
 }
