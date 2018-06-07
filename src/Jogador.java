@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import java.util.logging.Level;
@@ -337,7 +338,17 @@ public class Jogador extends javax.swing.JFrame {
         // PanelTabuleiro.setEnabled(false);
     }
 
-    
+    public void alteraObservadores(ArrayList<JogadorCaracteristicas> jogadores){
+        TextObservador.setText("");
+        for (int i = 0; i < jogadores.size(); i++) {
+              if(jogadores.get(i).isTipoJogador()==false){
+                  TextObservador.setText(TextObservador.getText()+"\n"+jogadores.get(i).getNome());
+              }else{
+                  if(i==0)LabelJogador1.setText(jogadores.get(i).getNome());
+                  if(i==1)LabelJogador2.setText(jogadores.get(i).getNome());;
+              }
+        }
+    }
     
     public void pecasDefault(String [][] aTipocor,String [][] aTipoCorFantasma) {
 
@@ -550,10 +561,13 @@ public class Jogador extends javax.swing.JFrame {
             //procura os objetos remotos registados, ao qual nos podemos ligar
             objRemoto = (InterfaceXadrez) reg.lookup("jogador");           //pedir opcao
             if(objRemoto.verificaNome(nome)==false){
+                System.out.println(objRemoto.verificaTipoJogador());
                 objRemoto.Jogador(new JogadorCaracteristicas(nome, 0, client, objRemoto, objRemoto.verificaTipoJogador()));
                 tipoCor=objRemoto.devolveArrayPrincipal();
                 tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
                 pecasDefault(tipoCor, tipoCorTabuleiroFantasma);
+                
+                
             }
             //avisa utilizador que nome já está ocupado
             }

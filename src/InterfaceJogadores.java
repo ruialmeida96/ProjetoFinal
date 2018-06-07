@@ -1,6 +1,8 @@
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import javax.swing.JTextArea;
 
 
 
@@ -17,5 +19,5 @@ import java.rmi.RemoteException;
 public interface InterfaceJogadores extends Remote{
     
    public void alteraTabuleiroAposJogo(String [][] tipoCor,String [][] tipoCorTabuleiroFantasma,InterfaceXadrez objRemoto)throws RemoteException;
-
+   public void atualizaTabelaObservadores(ArrayList<JogadorCaracteristicas> jogadores)throws RemoteException;
 }

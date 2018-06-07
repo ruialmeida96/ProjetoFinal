@@ -1,6 +1,9 @@
 
+import java.lang.reflect.Array;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import javax.swing.JTextArea;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,6 +25,6 @@ public interface InterfaceXadrez extends Remote{
    public String[][] devolveArrayFora ()throws RemoteException;
    public boolean verificaTipoJogador() throws RemoteException;
    public boolean verificaNome(String aNome)throws RemoteException;
-
+   public ArrayList<JogadorCaracteristicas> devolveUtilizadores()throws RemoteException;
 
 }

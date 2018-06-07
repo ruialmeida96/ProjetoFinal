@@ -1,6 +1,8 @@
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import javax.swing.JTextArea;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -26,6 +28,11 @@ public class ExtendeUnicast extends UnicastRemoteObject implements InterfaceJoga
                 jogador.pecasDefault(tipoCor, tipoCorTabuleiroFantasma);
     }
 
+    public void atualizaTabelaObservadores(ArrayList<JogadorCaracteristicas> jogadores) throws RemoteException {
+                jogador.alteraObservadores(jogadores);
+    }
+    
+    
  
    
 }

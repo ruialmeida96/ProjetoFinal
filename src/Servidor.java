@@ -7,6 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.ImageIcon;
+import javax.swing.JTextArea;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -32,11 +33,17 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
         //avisar todos os jogadores/observadores/CALLBACKS
         return true;
     }
-    public boolean Jogador(JogadorCaracteristicas referencia) {
+    public boolean Jogador(JogadorCaracteristicas referencia) throws RemoteException {
     //adicionar jogador a um array
         if(utilizadores==null)utilizadores=new ArrayList<JogadorCaracteristicas>();
         utilizadores.add(referencia);
+        for (int i = 0; i < utilizadores.size(); i++) {
+           utilizadores.get(i).getReferencia().atualizaTabelaObservadores(utilizadores);
+        }
         return true;
+    }
+    public ArrayList<JogadorCaracteristicas> devolveUtilizadores() {
+            return utilizadores;
     }
     public boolean verificaNome(String aNome) {
     //adicionar jogador a um array
@@ -49,7 +56,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
     }
     public boolean verificaTipoJogador() {
     //adicionar jogador a um array
-        if(utilizadores!=null)if(utilizadores.size()>2)return false;
+        if(utilizadores!=null)if(utilizadores.size()>1)return false;
         return true;
     }
     public String[][] devolveArrayPrincipal() throws RemoteException {
