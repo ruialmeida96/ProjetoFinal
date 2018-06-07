@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Scanner;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +19,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class Jogador extends javax.swing.JFrame implements InterfaceJogadores{
+public class Jogador extends javax.swing.JFrame {
     private javax.swing.JFrame frame;
     private String url = "127.0.0.1";
     private Registry reg = null;
@@ -337,11 +338,7 @@ public class Jogador extends javax.swing.JFrame implements InterfaceJogadores{
     }
 
     
-    public void alteraTabuleiroAposJogo() throws RemoteException{
-                tipoCor=objRemoto.devolveArrayPrincipal();
-                tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
-                pecasDefault(tipoCor, tipoCorTabuleiroFantasma);
-    }
+    
     public void pecasDefault(String [][] aTipocor,String [][] aTipoCorFantasma) {
 
         for (int i = 8; i >= 1; i--) {
@@ -532,20 +529,26 @@ public class Jogador extends javax.swing.JFrame implements InterfaceJogadores{
     }//GEN-LAST:event_TextPortoActionPerformed
 
     private void BotaoEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoEntrarActionPerformed
-
+        int porto=0;
+        String url =null;
         try {
             // formato URL de RMI: "//host:port/name"
-            //mostrar os nomes ativos       
-            String url = "127.0.0.1";
+            //mostrar os nomes ativos  
+            do{
+                 porto=Integer.parseInt(TextPorto.getText());
+               if(porto>0 || porto<4000);//introduza porto entre x e y.
+            }while(porto<0 || porto>4000);
+                url=TextIp.getText();
             //cria o rmiregistry e retorna referencia para o registry no host e porto especificado
-            Registry reg = LocateRegistry.getRegistry(url, 1099);
-            
-            Jogador client = new Jogador( );
-            InterfaceJogadores rem =(InterfaceJogadores) UnicastRemoteObject.exportObject(client,1099);
+            Registry reg = LocateRegistry.getRegistry(url, porto);
+            //Jogador client = new Jogador( );
+            //InterfaceJogadores rem =(InterfaceJogadores) UnicastRemoteObject.exportObject(client,1099);
+            ExtendeUnicast client = new ExtendeUnicast(this);
             reg.rebind("jogador1",client);//indentificador do cliente remoto
             //procura os objetos remotos registados, ao qual nos podemos ligar
             objRemoto = (InterfaceXadrez) reg.lookup("jogador");           //pedir opcao
             objRemoto.referenciaJogador(client);
+            objRemoto.utiRemotos(objRemoto);
             tipoCor=objRemoto.devolveArrayPrincipal();
             tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
             

@@ -5,6 +5,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Scanner;
 import javax.swing.ImageIcon;
 
 /*
@@ -21,7 +22,8 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
     private String[] letras = {"a", "b", "c", "d", "e", "f", "g", "h"};
     private String[] letras2 = {"i", "j", "k", "l"};
     private ArrayList<InterfaceJogadores> utilizadores =null;
-
+    private ArrayList<InterfaceXadrez> utiRemotos=null;
+    private static Scanner sc=new Scanner(System.in);
     Servidor() throws RemoteException  {
         super();
     }
@@ -35,6 +37,12 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
     //adicionar jogador a um array
         if(utilizadores==null)utilizadores=new ArrayList<InterfaceJogadores>();
         utilizadores.add(referencia);
+        return true;
+    }
+     public boolean utiRemotos(InterfaceXadrez referencia) {
+    //adicionar jogador a um array
+        if(utiRemotos==null)utiRemotos=new ArrayList<InterfaceXadrez>();
+        utiRemotos.add(referencia);
         return true;
     }
     public String[][] devolveArrayPrincipal() throws RemoteException {
@@ -71,6 +79,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
         //verifica se segunda casa tem peça
         if (stringNumero(y2) != 0) {//se segunda jogada for do tabuleiro principal entra           
             if (stringNumero(y) != 0) {//se a primeira jogada for do tabuleiro principal
+                if(tipoCor[x][stringNumero(y)]!=null){
                 if (tipoCor[x][stringNumero(y)].equals(tipoCorPeca)) {//se a peça escolhida inicialmente ainda for a mesma, vai alterar
                     if (tipoCor[x2][stringNumero(y2)] != null) {//se na jogada 2 tiver peça, entra
                         //pega na segunda peça e enfia no tabuleiro de fora
@@ -86,6 +95,9 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
                         tipoCor[x2][stringNumero(y2)] = tipoCor[x][stringNumero(y)];
                         tipoCor[x][stringNumero(y)] = null;
                         //avisar todos os jogadores/observadores/CALLBACKS
+                         for (int i = 0; i < utilizadores.size(); i++) {
+                                        utilizadores.get(i).alteraTabuleiroAposJogo(tipoCor,tipoCorTabuleiroFantasma, utiRemotos.get(i));
+                            }
                         return true;
 
                     } else {//se na jogada 2 não tiver peça
@@ -93,10 +105,15 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
                         tipoCor[x2][stringNumero(y2)] = tipoCor[x][stringNumero(y)];
                         tipoCor[x][stringNumero(y)] = null;
                         //avisar todos os jogadores/observadores/CALLBACKS
+                         for (int i = 0; i < utilizadores.size(); i++) {
+                                        utilizadores.get(i).alteraTabuleiroAposJogo(tipoCor,tipoCorTabuleiroFantasma, utiRemotos.get(i));
+                            }
                         return true;
                     }
                 }
+                }
             } else if (stringNumero2(y) != -1) {//se a primeira jogada for do tabuleiro fora
+                if(tipoCorTabuleiroFantasma[x][stringNumero2(y)]!=null){
                 if (tipoCorTabuleiroFantasma[x][stringNumero2(y)].equals(tipoCorPeca)) {//se a peça escolhida inicialmente ainda for a mesma, vai alterar
                     //verificar se a segunda jogada é do tabuleiro principal
                     if (stringNumero(y2) != 0) {
@@ -114,20 +131,24 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
                             tipoCor[x2][stringNumero(y2)] = tipoCorTabuleiroFantasma[x][stringNumero2(y)];
                             tipoCorTabuleiroFantasma[x][stringNumero2(y)] = null;
                             //avisar todos os jogadores/observadores/CALLBACKS
-
+                             for (int i = 0; i < utilizadores.size(); i++) {
+                                        utilizadores.get(i).alteraTabuleiroAposJogo(tipoCor,tipoCorTabuleiroFantasma, utiRemotos.get(i));
+                            }
                             return true;
                         } else {
                             tipoCor[x2][stringNumero(y2)] = tipoCorTabuleiroFantasma[x][stringNumero2(y)];
                             tipoCorTabuleiroFantasma[x][stringNumero2(y)] = null;
                             //avisar todos os jogadores/observadores/CALLBACKS
                             for (int i = 0; i < utilizadores.size(); i++) {
-                                        utilizadores.get(i).alteraTabuleiroAposJogo();
+                                        utilizadores.get(i).alteraTabuleiroAposJogo(tipoCor,tipoCorTabuleiroFantasma, utiRemotos.get(i));
                             }
                             return true;
                         }
                     }//se não for não faz nada
                 }//se não xistir la aquela peça no tabuleiro de fora não faz nada
+                }
             }
+        
         }
         return false;
     }
@@ -251,14 +272,18 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
     }
 
     public static void main(String args[]) {
-
+        int porto=0;
         ordena();
         try {
          // formato de URL para RMI: "//host:port/name"
          // por omissao assume localhost e porto 1099
          // igual a Naming.rebind("//localhost:1099/meuContador", serv);
-         
-         Registry reg = LocateRegistry.createRegistry(1099);
+         do{
+             System.out.println("Introduza o porto do servidor:");
+            porto=sc.nextInt();
+            if(porto>0 || porto<4000);//introduza porto entre x e y.
+         }while(porto<0 && porto>4000);
+         Registry reg = LocateRegistry.createRegistry(porto);
             Servidor serv = new Servidor();
         //referência é registada para depois poder ser procurada.
         reg.rebind("jogador",serv);

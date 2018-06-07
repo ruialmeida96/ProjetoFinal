@@ -16,6 +16,6 @@ import java.rmi.RemoteException;
  */
 public interface InterfaceJogadores extends Remote{
     
-   public void alteraTabuleiroAposJogo()throws RemoteException;
-    
+   public void alteraTabuleiroAposJogo(String [][] tipoCor,String [][] tipoCorTabuleiroFantasma,InterfaceXadrez objRemoto)throws RemoteException;
+
 }
