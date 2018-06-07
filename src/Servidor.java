@@ -12,10 +12,7 @@ import javax.swing.ImageIcon;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-/**
- *
- * @author jessica
- */
+
 public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
 
     private ImageIcon imgSair;
@@ -23,7 +20,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
     private static String[][] tipoCorTabuleiroFantasma = new String[8][4];
     private String[] letras = {"a", "b", "c", "d", "e", "f", "g", "h"};
     private String[] letras2 = {"i", "j", "k", "l"};
-    private ArrayList<ExtendeUnicast> utilizadores =null;
+    private ArrayList<InterfaceJogadores> utilizadores =null;
 
     Servidor() throws RemoteException  {
         super();
@@ -34,22 +31,35 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
         //avisar todos os jogadores/observadores/CALLBACKS
         return true;
     }
-    public boolean referenciaJogador(ExtendeUnicast referencia) {
+    public boolean referenciaJogador(InterfaceJogadores referencia) {
     //adicionar jogador a um array
-        if(utilizadores==null)utilizadores=new ArrayList<ExtendeUnicast>();
+        if(utilizadores==null)utilizadores=new ArrayList<InterfaceJogadores>();
         utilizadores.add(referencia);
         return true;
     }
+    public String[][] devolveArrayPrincipal() throws RemoteException {
+        return tipoCor;
+    }
 
+    public String[][] devolveArrayFora() throws RemoteException {
+        return tipoCorTabuleiroFantasma;
+    }
     //função retorna tipo e cor da peça na possição x e y, se não tiver peça nessa possição retorna null 
     public String verificaCasa(int x, String y) throws RemoteException {
+        int passou=0;
         if (stringNumero(y) != 0) {
+            passou=1;
             if (tipoCor[x][stringNumero(y)] != null) {
                 return tipoCor[x][stringNumero(y)];
             }
         }
-        if (stringNumero2(y) != 0) {
+        System.out.println(passou+" "+y);
+
+        if (stringNumero2(y)!=-1 && passou==0) {
+
             if (tipoCorTabuleiroFantasma[x][stringNumero2(y)] != null) {
+                                                    System.out.println("Jogador.selected()");
+
                 return tipoCorTabuleiroFantasma[x][stringNumero2(y)];
             }
         }
@@ -86,7 +96,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
                         return true;
                     }
                 }
-            } else if (stringNumero2(y) != 0) {//se a primeira jogada for do tabuleiro fora
+            } else if (stringNumero2(y) != -1) {//se a primeira jogada for do tabuleiro fora
                 if (tipoCorTabuleiroFantasma[x][stringNumero2(y)].equals(tipoCorPeca)) {//se a peça escolhida inicialmente ainda for a mesma, vai alterar
                     //verificar se a segunda jogada é do tabuleiro principal
                     if (stringNumero(y2) != 0) {
@@ -110,6 +120,9 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
                             tipoCor[x2][stringNumero(y2)] = tipoCorTabuleiroFantasma[x][stringNumero2(y)];
                             tipoCorTabuleiroFantasma[x][stringNumero2(y)] = null;
                             //avisar todos os jogadores/observadores/CALLBACKS
+                            for (int i = 0; i < utilizadores.size(); i++) {
+                                        utilizadores.get(i).alteraTabuleiroAposJogo();
+                            }
                             return true;
                         }
                     }//se não for não faz nada
@@ -234,6 +247,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
         tipoCor[2][6] = "00";
         tipoCor[2][7] = "00";
         tipoCor[2][8] = "00";
+        
     }
 
     public static void main(String args[]) {
@@ -250,13 +264,14 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
         reg.rebind("jogador",serv);
 
          System.out.println("servidor RMI iniciado");
-        
       }
       catch (Exception e) {
          System.out.println(e);
       }
         
     }
+
+    
 
     
    

@@ -4,11 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.lang.reflect.Array;
 import java.rmi.NotBoundException;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,25 +18,24 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class Cliente extends javax.swing.JFrame implements InterfaceJogadores{
+public class Jogador extends javax.swing.JFrame implements InterfaceJogadores{
     private javax.swing.JFrame frame;
     private String url = "127.0.0.1";
     private Registry reg = null;
     private ImageIcon imgSair;
     private SquarePanel[][] board = new SquarePanel[9][9];
     private SquarePanel[][] boardpecas = new SquarePanel[8][4];
-    private String[][] tipoCor = new String[9][9];
-    private String[][] tipoCorTabuleiroFantasma = new String[8][4];
+    private String[][] tipoCor;
+    private String[][] tipoCorTabuleiroFantasma;
     private String[] letras = {"a", "b", "c", "d", "e", "f", "g", "h"};
     private String[] letras2 = {"i", "j", "k", "l"};
     private InterfaceXadrez objRemoto =null;
     private int jog1 = -1;
-    private String jog1s = null;
+    private String jog1s = null,pecaJog1=null;
 
-    public Cliente() {
+    public Jogador() {
         initComponents();
         botoesinicio();
-        colocaPecaTipoCor();
         PanelTabuleiro.setLayout(new GridLayout(8, 8));
         PanelPecas.setLayout(new GridLayout(8, 4));
 
@@ -65,9 +66,6 @@ public class Cliente extends javax.swing.JFrame implements InterfaceJogadores{
         PanelPecas.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.DARK_GRAY)));
 
         add(PanelTabuleiro, BorderLayout.CENTER);
-
-        pecasDefault();
-
     }
 
     @SuppressWarnings("unchecked")
@@ -338,99 +336,33 @@ public class Cliente extends javax.swing.JFrame implements InterfaceJogadores{
         // PanelTabuleiro.setEnabled(false);
     }
 
-    private void colocaPecaTipoCor() {
-        //linha primeira de baixo, peças brancas
-        tipoCor[8][1] = "31";
-        tipoCor[8][2] = "11";
-        tipoCor[8][3] = "21";
-        tipoCor[8][4] = "41";
-        tipoCor[8][5] = "51";
-        tipoCor[8][6] = "21";
-        tipoCor[8][7] = "11";
-        tipoCor[8][8] = "31";
-
-        //segunda linha de baixo, peças brancas
-        tipoCor[7][1] = "01";
-        tipoCor[7][2] = "01";
-        tipoCor[7][3] = "01";
-        tipoCor[7][4] = "01";
-        tipoCor[7][5] = "01";
-        tipoCor[7][6] = "01";
-        tipoCor[7][7] = "01";
-        tipoCor[7][8] = "01";
-
-        //primeira linha de cima, peças pretas
-        tipoCor[1][1] = "30";
-        tipoCor[1][2] = "10";
-        tipoCor[1][3] = "20";
-        tipoCor[1][4] = "40";
-        tipoCor[1][5] = "50";
-        tipoCor[1][6] = "20";
-        tipoCor[1][7] = "10";
-        tipoCor[1][8] = "30";
-
-        //segunda linha cima, peças pretas
-        tipoCor[2][1] = "00";
-        tipoCor[2][2] = "00";
-        tipoCor[2][3] = "00";
-        tipoCor[2][4] = "00";
-        tipoCor[2][5] = "00";
-        tipoCor[2][6] = "00";
-        tipoCor[2][7] = "00";
-        tipoCor[2][8] = "00";
+    
+    public void alteraTabuleiroAposJogo() throws RemoteException{
+                tipoCor=objRemoto.devolveArrayPrincipal();
+                tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
+                pecasDefault(tipoCor, tipoCorTabuleiroFantasma);
     }
+    public void pecasDefault(String [][] aTipocor,String [][] aTipoCorFantasma) {
 
-    public void pecasDefault() {
         for (int i = 8; i >= 1; i--) {
             for (int j = 1; j < 9; j++) {
                 board[i][j].removePiece();
+                if(aTipocor[i][j]!=null){
+                    String var=aTipocor[i][j];
+                    board[i][j].setPiece(Character.getNumericValue(var.charAt(1)),Character.getNumericValue(var.charAt(0)));
+                }
             }
         }
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 4; j++) {
                 boardpecas[i][j].removePiece();
-                tipoCorTabuleiroFantasma[i][j] = null;
+                if(aTipoCorFantasma[i][j]!=null){
+                    String var=aTipoCorFantasma[i][j];
+                    boardpecas[i][j].setPiece(Character.getNumericValue(var.charAt(1)),Character.getNumericValue(var.charAt(0)));
+                }
             }
         }
-        //linha primeira de baixo, peças brancas
-        board[8][1].setPiece(1, 3);
-        board[8][2].setPiece(1, 1);
-        board[8][3].setPiece(1, 2);
-        board[8][4].setPiece(1, 4);
-        board[8][5].setPiece(1, 5);
-        board[8][6].setPiece(1, 2);
-        board[8][7].setPiece(1, 1);
-        board[8][8].setPiece(1, 3);
-
-        //segunda linha de baixo, peças brancas
-        board[7][1].setPiece(1, 0);
-        board[7][2].setPiece(1, 0);
-        board[7][3].setPiece(1, 0);
-        board[7][4].setPiece(1, 0);
-        board[7][5].setPiece(1, 0);
-        board[7][6].setPiece(1, 0);
-        board[7][7].setPiece(1, 0);
-        board[7][8].setPiece(1, 0);
-
-        //primeira linha de cima, peças pretas
-        board[1][1].setPiece(0, 3);
-        board[1][2].setPiece(0, 1);
-        board[1][3].setPiece(0, 2);
-        board[1][4].setPiece(0, 4);
-        board[1][5].setPiece(0, 5);
-        board[1][6].setPiece(0, 2);
-        board[1][7].setPiece(0, 1);
-        board[1][8].setPiece(0, 3);
-
-        //segunda linha cima, peças pretas
-        board[2][1].setPiece(0, 0);
-        board[2][2].setPiece(0, 0);
-        board[2][3].setPiece(0, 0);
-        board[2][4].setPiece(0, 0);
-        board[2][5].setPiece(0, 0);
-        board[2][6].setPiece(0, 0);
-        board[2][7].setPiece(0, 0);
-        board[2][8].setPiece(0, 0);
+        
     }
 
     public int stringNumero(String letra) {
@@ -506,21 +438,28 @@ public class Cliente extends javax.swing.JFrame implements InterfaceJogadores{
 
     }//GEN-LAST:event_BotaoSentar1ActionPerformed
 
-    public void selected(int x, String y) {
+    public void selected(int x, String y) throws RemoteException {
         if (jog1 == -1) {
-            if (stringNumero(y) != 0) {
-                if (tipoCor[x][stringNumero(y)] != null) {
+            if (stringNumero(y) != 0) {//se for do tabuleiro principal
+                pecaJog1=objRemoto.verificaCasa(x, y);
+                if (pecaJog1 != null) {
                     jog1 = x;
                     jog1s = y;
                 }
-            } else {
-                if (tipoCorTabuleiroFantasma[x][stringNumero2(y)] != null) {
+            } else {//se for tabuleiro de fora
+                pecaJog1=objRemoto.verificaCasa(x, y);
+                if (pecaJog1 != null) {
                     jog1 = x;
                     jog1s = y;
                 }
             }
         } else {
-            if (stringNumero(y) != 0) {
+                objRemoto.jogada(jog1, jog1s, x, y, pecaJog1);
+                tipoCor=objRemoto.devolveArrayPrincipal();
+                tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
+            
+                pecasDefault(tipoCor, tipoCorTabuleiroFantasma);
+           /* if (stringNumero(y) != 0) {
                 String name = null;
                 //vai buscar o tipo e cor da peça na primeira posição "0b"
                 board[jog1][stringNumero(jog1s)].setBorder(null);
@@ -572,7 +511,7 @@ public class Cliente extends javax.swing.JFrame implements InterfaceJogadores{
                 }
                 //if (stringNumero(jog1s) != 0) board[x][stringNumero(y)].setBorder(null);
 
-            }
+            }*/
             jog1 = -1;
             jog1s = null;
 
@@ -600,15 +539,21 @@ public class Cliente extends javax.swing.JFrame implements InterfaceJogadores{
             String url = "127.0.0.1";
             //cria o rmiregistry e retorna referencia para o registry no host e porto especificado
             Registry reg = LocateRegistry.getRegistry(url, 1099);
-            ExtendeUnicast client = new ExtendeUnicast();
+            
+            Jogador client = new Jogador( );
+            InterfaceJogadores rem =(InterfaceJogadores) UnicastRemoteObject.exportObject(client,1099);
             reg.rebind("jogador1",client);//indentificador do cliente remoto
             //procura os objetos remotos registados, ao qual nos podemos ligar
             objRemoto = (InterfaceXadrez) reg.lookup("jogador");           //pedir opcao
-            System.out.println(reg+"/n"+client);
             objRemoto.referenciaJogador(client);
+            tipoCor=objRemoto.devolveArrayPrincipal();
+            tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
+            
+            pecasDefault(tipoCor, tipoCorTabuleiroFantasma);
         } catch (Exception e) {
             System.out.println(e);
         }
+        
 
     }//GEN-LAST:event_BotaoEntrarActionPerformed
 
@@ -619,8 +564,6 @@ public class Cliente extends javax.swing.JFrame implements InterfaceJogadores{
     private void BotaoOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoOrdenarActionPerformed
 
         //parte de ordenar o tabuleiro todo
-        colocaPecaTipoCor();
-        pecasDefault();
     }//GEN-LAST:event_BotaoOrdenarActionPerformed
 
     private void BotaoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSairActionPerformed
@@ -628,9 +571,9 @@ public class Cliente extends javax.swing.JFrame implements InterfaceJogadores{
             reg.unbind("consulta");
             //UnicastRemoteObject.unexportObject(client, true);
         } catch (RemoteException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotBoundException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
         }
      }//GEN-LAST:event_BotaoSairActionPerformed
 
@@ -638,8 +581,8 @@ public class Cliente extends javax.swing.JFrame implements InterfaceJogadores{
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                //new Cliente().setVisible(true);
-                Cliente interf = new Cliente();
+                //new Jogador().setVisible(true);
+                Jogador interf = new Jogador();
                 interf.setVisible(true);
             }
         });

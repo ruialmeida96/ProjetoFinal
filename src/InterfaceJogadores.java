@@ -1,5 +1,6 @@
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 
 
@@ -15,6 +16,6 @@ import java.rmi.Remote;
  */
 public interface InterfaceJogadores extends Remote{
     
-   
+   public void alteraTabuleiroAposJogo()throws RemoteException;
     
 }

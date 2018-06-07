@@ -1,13 +1,16 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 public class SquarePanel extends JPanel {
 
     private int row;
     String column;
-    private Cliente cg;
+    private Jogador cg;
     private JLabel imageLabel;
     private static Image pieceImage[][] = new Image[2][6];
     private static String imageFilename[][] = {
@@ -17,7 +20,7 @@ public class SquarePanel extends JPanel {
     //colors: 0 - white; 1 - black;
     //pieces: 0 - pawn(pe�o); 1 - knight(cavalo); 2 - bishop(bispo)
     //        3 - rook(torre); 4 - queen(rainha); 5 - king(rei)
-    public SquarePanel(int x, String y, Cliente c) {
+    public SquarePanel(int x, String y, Jogador c) {
         row = x;
         column = y;
         cg = c;
@@ -60,7 +63,11 @@ public class SquarePanel extends JPanel {
         }
 
         public void mousePressed(MouseEvent e) {
-            cg.selected(row, column);
+            try {
+                cg.selected(row, column);
+            } catch (RemoteException ex) {
+                Logger.getLogger(SquarePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
             setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 
         }
