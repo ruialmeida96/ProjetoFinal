@@ -530,7 +530,7 @@ public class Jogador extends javax.swing.JFrame {
 
     private void BotaoEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoEntrarActionPerformed
         int porto=0;
-        String url =null;
+        String url =null,nome=null;
         try {
             // formato URL de RMI: "//host:port/name"
             //mostrar os nomes ativos  
@@ -539,6 +539,8 @@ public class Jogador extends javax.swing.JFrame {
                if(porto>0 || porto<4000);//introduza porto entre x e y.
             }while(porto<0 || porto>4000);
                 url=TextIp.getText();
+                nome=TextNome.getText();
+            if(nome!=null && url!=null && porto!=0){
             //cria o rmiregistry e retorna referencia para o registry no host e porto especificado
             Registry reg = LocateRegistry.getRegistry(url, porto);
             //Jogador client = new Jogador( );
@@ -547,13 +549,16 @@ public class Jogador extends javax.swing.JFrame {
             reg.rebind("jogador1",client);//indentificador do cliente remoto
             //procura os objetos remotos registados, ao qual nos podemos ligar
             objRemoto = (InterfaceXadrez) reg.lookup("jogador");           //pedir opcao
-            objRemoto.referenciaJogador(client);
-            objRemoto.utiRemotos(objRemoto);
-            tipoCor=objRemoto.devolveArrayPrincipal();
-            tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
-            
-            pecasDefault(tipoCor, tipoCorTabuleiroFantasma);
+            if(objRemoto.verificaNome(nome)==false){
+                objRemoto.Jogador(new JogadorCaracteristicas(nome, 0, client, objRemoto, objRemoto.verificaTipoJogador()));
+                tipoCor=objRemoto.devolveArrayPrincipal();
+                tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
+                pecasDefault(tipoCor, tipoCorTabuleiroFantasma);
+            }
+            //avisa utilizador que nome já está ocupado
+            }
         } catch (Exception e) {
+            //Mensagem de aviso-introduz os dados!!
             System.out.println(e);
         }
         

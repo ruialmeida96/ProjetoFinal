@@ -21,8 +21,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
     private static String[][] tipoCorTabuleiroFantasma = new String[8][4];
     private String[] letras = {"a", "b", "c", "d", "e", "f", "g", "h"};
     private String[] letras2 = {"i", "j", "k", "l"};
-    private ArrayList<InterfaceJogadores> utilizadores =null;
-    private ArrayList<InterfaceXadrez> utiRemotos=null;
+    private ArrayList<JogadorCaracteristicas> utilizadores =null;
     private static Scanner sc=new Scanner(System.in);
     Servidor() throws RemoteException  {
         super();
@@ -33,16 +32,24 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
         //avisar todos os jogadores/observadores/CALLBACKS
         return true;
     }
-    public boolean referenciaJogador(InterfaceJogadores referencia) {
+    public boolean Jogador(JogadorCaracteristicas referencia) {
     //adicionar jogador a um array
-        if(utilizadores==null)utilizadores=new ArrayList<InterfaceJogadores>();
+        if(utilizadores==null)utilizadores=new ArrayList<JogadorCaracteristicas>();
         utilizadores.add(referencia);
         return true;
     }
-     public boolean utiRemotos(InterfaceXadrez referencia) {
+    public boolean verificaNome(String aNome) {
     //adicionar jogador a um array
-        if(utiRemotos==null)utiRemotos=new ArrayList<InterfaceXadrez>();
-        utiRemotos.add(referencia);
+        if(utilizadores!=null){
+            for (int i = 0; i < utilizadores.size(); i++) {
+                if(utilizadores.get(i).getNome().equalsIgnoreCase(aNome))return true;
+            }
+        }
+            return false;
+    }
+    public boolean verificaTipoJogador() {
+    //adicionar jogador a um array
+        if(utilizadores!=null)if(utilizadores.size()>2)return false;
         return true;
     }
     public String[][] devolveArrayPrincipal() throws RemoteException {
@@ -96,7 +103,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
                         tipoCor[x][stringNumero(y)] = null;
                         //avisar todos os jogadores/observadores/CALLBACKS
                          for (int i = 0; i < utilizadores.size(); i++) {
-                                        utilizadores.get(i).alteraTabuleiroAposJogo(tipoCor,tipoCorTabuleiroFantasma, utiRemotos.get(i));
+                                        utilizadores.get(i).getReferencia().alteraTabuleiroAposJogo(tipoCor,tipoCorTabuleiroFantasma, utilizadores.get(i).getObjRemoto());
                             }
                         return true;
 
@@ -106,7 +113,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
                         tipoCor[x][stringNumero(y)] = null;
                         //avisar todos os jogadores/observadores/CALLBACKS
                          for (int i = 0; i < utilizadores.size(); i++) {
-                                        utilizadores.get(i).alteraTabuleiroAposJogo(tipoCor,tipoCorTabuleiroFantasma, utiRemotos.get(i));
+                                        utilizadores.get(i).getReferencia().alteraTabuleiroAposJogo(tipoCor,tipoCorTabuleiroFantasma, utilizadores.get(i).getObjRemoto());
                             }
                         return true;
                     }
@@ -132,7 +139,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
                             tipoCorTabuleiroFantasma[x][stringNumero2(y)] = null;
                             //avisar todos os jogadores/observadores/CALLBACKS
                              for (int i = 0; i < utilizadores.size(); i++) {
-                                        utilizadores.get(i).alteraTabuleiroAposJogo(tipoCor,tipoCorTabuleiroFantasma, utiRemotos.get(i));
+                                        utilizadores.get(i).getReferencia().alteraTabuleiroAposJogo(tipoCor,tipoCorTabuleiroFantasma, utilizadores.get(i).getObjRemoto());
                             }
                             return true;
                         } else {
@@ -140,7 +147,7 @@ public class Servidor extends UnicastRemoteObject implements InterfaceXadrez{
                             tipoCorTabuleiroFantasma[x][stringNumero2(y)] = null;
                             //avisar todos os jogadores/observadores/CALLBACKS
                             for (int i = 0; i < utilizadores.size(); i++) {
-                                        utilizadores.get(i).alteraTabuleiroAposJogo(tipoCor,tipoCorTabuleiroFantasma, utiRemotos.get(i));
+                                        utilizadores.get(i).getReferencia().alteraTabuleiroAposJogo(tipoCor,tipoCorTabuleiroFantasma, utilizadores.get(i).getObjRemoto());
                             }
                             return true;
                         }

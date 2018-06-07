@@ -17,10 +17,11 @@ public interface InterfaceXadrez extends Remote{
    public boolean ordenaTabuleiro() throws RemoteException;
    public boolean jogada(int x,String y,int x2,String y2,String tipoCorPeca) throws RemoteException;
    public String verificaCasa(int x,String y)throws RemoteException;
-   public boolean referenciaJogador (InterfaceJogadores referencia) throws RemoteException;
-   public boolean utiRemotos (InterfaceXadrez referencia) throws RemoteException;
+   public boolean Jogador (JogadorCaracteristicas referencia) throws RemoteException;
    public String[][] devolveArrayPrincipal ()throws RemoteException;
    public String[][] devolveArrayFora ()throws RemoteException;
+   public boolean verificaTipoJogador() throws RemoteException;
+   public boolean verificaNome(String aNome)throws RemoteException;
 
 
 }
