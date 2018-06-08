@@ -173,6 +173,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="TextIp">
       <Properties>
+        <Property name="text" type="java.lang.String" value="127.0.0.1"/>
         <Property name="name" type="java.lang.String" value="TextIp" noResource="true"/>
       </Properties>
     </Component>
@@ -182,6 +183,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="TextPorto">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="2000"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TextPortoActionPerformed"/>
       </Events>
@@ -241,16 +245,13 @@
         <Property name="text" type="java.lang.String" value="Sentar"/>
         <Property name="name" type="java.lang.String" value="cadeira2" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BotaoSentar2ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="LabelJogador1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Nome Jogador 1"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="LabelJogador2">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Nome Jogador 2"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="BotaoOrdenar">
       <Properties>
