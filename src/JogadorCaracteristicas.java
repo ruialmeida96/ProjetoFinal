@@ -19,9 +19,9 @@ public class JogadorCaracteristicas implements Serializable
     private int index;
     private InterfaceJogadores referencia;
     private InterfaceXadrez objRemoto;
-    private boolean tipoJogador;
+    private int tipoJogador;
 
-    public JogadorCaracteristicas(String aNome,int aIndex, InterfaceJogadores aReferencia,InterfaceXadrez aObjRemoto, boolean aTipoJogador ) {
+    public JogadorCaracteristicas(String aNome,int aIndex, InterfaceJogadores aReferencia,InterfaceXadrez aObjRemoto, int aTipoJogador ) {
         nome=aNome;
         index=aIndex;
         referencia=aReferencia;
@@ -29,6 +29,7 @@ public class JogadorCaracteristicas implements Serializable
         tipoJogador=aTipoJogador;
     }
 
+    
     public String getNome() {
         return nome;
     }
@@ -45,8 +46,12 @@ public class JogadorCaracteristicas implements Serializable
         return objRemoto;
     }
 
-    public boolean isTipoJogador() {
+    public int isTipoJogador() {
         return tipoJogador;
+    }
+
+    public void setTipoJogador(int tipoJogador) {
+        this.tipoJogador = tipoJogador;
     }
 
    

@@ -96,6 +96,7 @@ public class Jogador extends javax.swing.JFrame {
         TextNome = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         TextChat = new javax.swing.JTextArea();
+        BotaoFora = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(102, 102, 255));
@@ -188,6 +189,11 @@ public class Jogador extends javax.swing.JFrame {
         jScrollPane3.setViewportView(TextObservador);
 
         BotaoObservador.setText("Observador");
+        BotaoObservador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotaoObservadorActionPerformed(evt);
+            }
+        });
 
         PanelPecas.setBackground(new java.awt.Color(102, 102, 102));
 
@@ -216,6 +222,13 @@ public class Jogador extends javax.swing.JFrame {
         TextChat.setColumns(20);
         TextChat.setRows(5);
         jScrollPane1.setViewportView(TextChat);
+
+        BotaoFora.setText("Colocar peças fora");
+        BotaoFora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotaoForaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -248,9 +261,11 @@ public class Jogador extends javax.swing.JFrame {
                                 .addGap(48, 48, 48)
                                 .addComponent(PanelTabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(46, 46, 46))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addComponent(BotaoOrdenar)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(BotaoFora)
+                            .addComponent(BotaoOrdenar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(LabelJogador2)
                         .addGap(41, 41, 41)
@@ -313,18 +328,19 @@ public class Jogador extends javax.swing.JFrame {
                                     .addComponent(BotaoEnviarMsg)))
                             .addComponent(PanelTabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(PanelPecas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(LabelJogador2)
                                 .addComponent(BotaoSentar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(BotaoOrdenar))
-                        .addGap(18, 18, 18))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BotaoFora))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(BotaoObservador)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap())))
         );
 
         pack();
@@ -338,37 +354,44 @@ public class Jogador extends javax.swing.JFrame {
         BotaoOrdenar.setEnabled(false);
         PanelTabuleiro.setEnabled(false);
          BotaoSentar2.setEnabled(false);
+         BotaoFora.setEnabled(false);
+         LabelJogador1.setText("");
+         LabelJogador2.setText("");
+         PanelTabuleiro.setEnabled(false);
+         PanelPecas.setEnabled(false);
+   }
+    private void botoesObservador(){
+        BotaoEnviarMsg.setEnabled(false);
+        BotaoObservador.setEnabled(false);
+        BotaoOrdenar.setEnabled(false);
+        PanelTabuleiro.setEnabled(false);
+         BotaoFora.setEnabled(false);
+         PanelTabuleiro.setEnabled(false);
+         PanelPecas.setEnabled(false);
     }
+    private void botoesJogadores(){
+                    BotaoObservador.setEnabled(true);
+                    BotaoOrdenar.setEnabled(true);
+                    BotaoEnviarMsg.setEnabled(true);
+                    BotaoFora.setEnabled(true);
+                    PanelTabuleiro.setEnabled(true);
+                    PanelPecas.setEnabled(true);
+    }
+    
 
     public void alteraObservadores(ArrayList<JogadorCaracteristicas> jogadores){
         TextObservador.setText("");
+        LabelJogador1.setText("");
+        BotaoSentar1.setEnabled(true);
+        LabelJogador2.setText("");
+        BotaoSentar2.setEnabled(true);
         for (int i = 0; i < jogadores.size(); i++) {
-            if(jogadores.get(i)!=null){
-              if(jogadores.get(i).isTipoJogador()==false){
-                  
-                  TextObservador.setText(TextObservador.getText()+"\n"+jogadores.get(i).getNome());
-              }else{
-                  if(i==0){
-                      LabelJogador1.setText(jogadores.get(i).getNome());
-                      BotaoSentar1.setEnabled(false);
-                      if(jogadores.size()==1)BotaoSentar2.setEnabled(true);
-                      
-                  }
-                  if(i==1){
-                      LabelJogador2.setText(jogadores.get(i).getNome());
-                      BotaoSentar2.setEnabled(false);
-                  }
-              }
-            }else{
-                if(i==0){
-                    LabelJogador1.setText("");
-                    BotaoSentar1.setEnabled(true);
-                }
-                  if(i==1){
-                      LabelJogador2.setText("");
-                      BotaoSentar2.setEnabled(true);
-                  }
-            }
+                  if(jogadores.get(i).isTipoJogador()==-1) TextObservador.setText(TextObservador.getText()+"\n"+jogadores.get(i).getNome());
+                  if(jogadores.get(i).isTipoJogador()==1)    LabelJogador1.setText(jogadores.get(i).getNome());
+                  if(jogadores.get(i).isTipoJogador()==1)    BotaoSentar1.setEnabled(false);
+                  if(jogadores.get(i).isTipoJogador()==2)   LabelJogador2.setText(jogadores.get(i).getNome());
+                  if(jogadores.get(i).isTipoJogador()==2)    BotaoSentar2.setEnabled(false);
+ 
         }
     }
     
@@ -463,13 +486,14 @@ public class Jogador extends javax.swing.JFrame {
     }
     private void BotaoSentar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSentar1ActionPerformed
         try {
-            eu.getObjRemoto().sentar(eu,0);
+            if(eu.getObjRemoto().sentar(eu,0))botoesJogadores();
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
         }      
     }//GEN-LAST:event_BotaoSentar1ActionPerformed
 
     public void selected(int x, String y) throws RemoteException {
+        
         if (jog1 == -1) {
             if (stringNumero(y) != 0) {//se for do tabuleiro principal
                 pecaJog1=objRemoto.verificaCasa(x, y);
@@ -485,13 +509,13 @@ public class Jogador extends javax.swing.JFrame {
                 }
             }
         } else {
-                objRemoto.jogada(jog1, jog1s, x, y, pecaJog1);
-                tipoCor=objRemoto.devolveArrayPrincipal();
-                tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
-                pecasDefault(tipoCor, tipoCorTabuleiroFantasma);
+                objRemoto.jogada(jog1, jog1s, x, y, pecaJog1,eu.getNome());
+                
+                
             jog1 = -1;
             jog1s = null;
 
+        
         }
 
     }
@@ -530,13 +554,16 @@ public class Jogador extends javax.swing.JFrame {
             //procura os objetos remotos registados, ao qual nos podemos ligar
             objRemoto = (InterfaceXadrez) reg.lookup("jogador");           //pedir opcao
             if(objRemoto.verificaNome(nome)==false){
-                System.out.println(objRemoto.verificaTipoJogador());
-                eu=new JogadorCaracteristicas(nome, 0, client, objRemoto, objRemoto.verificaTipoJogador());
+                int tipo=objRemoto.verificaTipoJogador();
+                eu=new JogadorCaracteristicas(nome, 0, client, objRemoto, tipo);
                 objRemoto.Jogador(eu);
                 tipoCor=objRemoto.devolveArrayPrincipal();
                 tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
                 pecasDefault(tipoCor, tipoCorTabuleiroFantasma);
-                
+                if(tipo!=-1){
+                   botoesJogadores();
+                }
+
                 
             }
             //avisa utilizador que nome já está ocupado
@@ -566,8 +593,7 @@ public class Jogador extends javax.swing.JFrame {
     private void BotaoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSairActionPerformed
         try {
             objRemoto.desconectar(eu.getNome());
-            //reg.unbind("jogador");
-            //eu.unexportObject(eu.getReferencia(), true);
+            botoesinicio();
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -576,11 +602,30 @@ public class Jogador extends javax.swing.JFrame {
 
     private void BotaoSentar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSentar2ActionPerformed
         try {
-            eu.getObjRemoto().sentar(eu,1);
+            if(eu.getObjRemoto().sentar(eu,1))botoesJogadores();
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_BotaoSentar2ActionPerformed
+
+    private void BotaoObservadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoObservadorActionPerformed
+        try {
+            if(objRemoto.observar(eu)){
+                botoesObservador();
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_BotaoObservadorActionPerformed
+
+    private void BotaoForaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoForaActionPerformed
+        try {
+            objRemoto.pecasForaTabuleiro();
+        } catch (RemoteException ex) {
+            Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_BotaoForaActionPerformed
 
     public static void main(String args[]) {
 
@@ -597,6 +642,7 @@ public class Jogador extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotaoEntrar;
     private javax.swing.JButton BotaoEnviarMsg;
+    private javax.swing.JButton BotaoFora;
     private javax.swing.JButton BotaoObservador;
     private javax.swing.JButton BotaoOrdenar;
     private javax.swing.JButton BotaoSair;
