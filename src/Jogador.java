@@ -9,7 +9,10 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,18 +23,21 @@ import javax.swing.JButton;
 public class Jogador extends javax.swing.JFrame {
     private javax.swing.JFrame frame;
     private String url = "127.0.0.1";
-    private Registry reg = null;
+    private static  Registry reg = null;
     private ImageIcon imgSair;
+    private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
     private SquarePanel[][] board = new SquarePanel[9][9];
     private SquarePanel[][] boardpecas = new SquarePanel[8][4];
     private String[][] tipoCor;
     private String[][] tipoCorTabuleiroFantasma;
     private String[] letras = {"a", "b", "c", "d", "e", "f", "g", "h"};
     private String[] letras2 = {"i", "j", "k", "l"};
-    private InterfaceXadrez objRemoto =null;
+    private  InterfaceXadrez objRemoto =null;
     private int jog1 = -1;
     private JogadorCaracteristicas eu=null;
+    private static ExtendeUnicast client=null;
     private String jog1s = null,pecaJog1=null;
+    private ArrayList <Mensagem> mensagens=null;
 
     public Jogador() {
         initComponents();
@@ -361,6 +367,7 @@ public class Jogador extends javax.swing.JFrame {
          PanelPecas.setEnabled(false);
    }
     private void botoesObservador(){
+        BotaoEntrar.setEnabled(false);
         BotaoEnviarMsg.setEnabled(false);
         BotaoObservador.setEnabled(false);
         BotaoOrdenar.setEnabled(false);
@@ -369,7 +376,15 @@ public class Jogador extends javax.swing.JFrame {
          PanelTabuleiro.setEnabled(false);
          PanelPecas.setEnabled(false);
     }
+    private void botoesSair(){
+        TextMensagem.setText("");
+        TextChat.setText("");
+        TextObservador.setText("");
+        BotaoSair.setEnabled(false);
+        BotaoEntrar.setEnabled(true);
+    }
     private void botoesJogadores(){
+                BotaoEntrar.setEnabled(false);
                     BotaoObservador.setEnabled(true);
                     BotaoOrdenar.setEnabled(true);
                     BotaoEnviarMsg.setEnabled(true);
@@ -378,25 +393,54 @@ public class Jogador extends javax.swing.JFrame {
                     PanelPecas.setEnabled(true);
     }
     
-
-    public void alteraObservadores(ArrayList<JogadorCaracteristicas> jogadores){
-        TextObservador.setText("");
-        LabelJogador1.setText("");
-        BotaoSentar1.setEnabled(true);
-        LabelJogador2.setText("");
-        BotaoSentar2.setEnabled(true);
-        for (int i = 0; i < jogadores.size(); i++) {
-                  if(jogadores.get(i).isTipoJogador()==-1) TextObservador.setText(TextObservador.getText()+"\n"+jogadores.get(i).getNome());
-                  if(jogadores.get(i).isTipoJogador()==1)    LabelJogador1.setText(jogadores.get(i).getNome());
-                  if(jogadores.get(i).isTipoJogador()==1)    BotaoSentar1.setEnabled(false);
-                  if(jogadores.get(i).isTipoJogador()==2)   LabelJogador2.setText(jogadores.get(i).getNome());
-                  if(jogadores.get(i).isTipoJogador()==2)    BotaoSentar2.setEnabled(false);
- 
+   public void atualizaMensagens(Mensagem aMensagens){//atualiza adicionando uma mensagem
+            TextChat.setText(TextChat.getText()+""+aMensagens.getHora()+" "+aMensagens.getNome()+": "+aMensagens.getMensagem()+"\n");
+   }
+   
+    public void utilizadorAltera(JogadorCaracteristicas jogador,int tipoAntigo){
+        if(jogador.isTipoJogador()==1){
+            LabelJogador1.setText(jogador.getNome());
+            BotaoSentar1.setEnabled(false);
+            if(tipoAntigo==2){
+                 LabelJogador2.setText("");
+                BotaoSentar2.setEnabled(true);
+            }else if(tipoAntigo==-1){
+                TextObservador.setText(TextObservador.getText().replaceAll(jogador.getNome(),""));//nao funciona!!
+            }
+        }else if(jogador.isTipoJogador()==2){
+            LabelJogador2.setText(jogador.getNome());
+            BotaoSentar2.setEnabled(false);
+             if(tipoAntigo==1){
+                 LabelJogador1.setText("");
+                BotaoSentar1.setEnabled(true);
+            }else if(tipoAntigo==-1){
+                TextObservador.setText(TextObservador.getText().replaceAll(jogador.getNome(),""));//nao funciona!!
+            }
+        }else if(jogador.isTipoJogador()==-1){
+            TextObservador.setText(TextObservador.getText()+jogador.getNome()+"\n");
+             if(tipoAntigo==2){
+                 LabelJogador2.setText("");
+                BotaoSentar2.setEnabled(true);
+            }else if(tipoAntigo==1){
+                LabelJogador1.setText("");
+                BotaoSentar1.setEnabled(true);
+            }
+        }else if(jogador.isTipoJogador()==0){
+            //remover nome
+                if(tipoAntigo==2){
+                 LabelJogador2.setText("");
+                BotaoSentar2.setEnabled(true);
+            }else if(tipoAntigo==1){
+                LabelJogador1.setText("");
+                BotaoSentar1.setEnabled(true);
+            }else{
+                TextObservador.setText(TextObservador.getText().replaceAll(jogador.getNome(),""));//nao funciona!!
+            }
         }
     }
     
-    public void pecasDefault(String [][] aTipocor,String [][] aTipoCorFantasma) {
-
+    public void pecasDefault(String [][] aTipocor,String [][] aTipoCorFantasma,ArrayList<Mensagem> aMensagens,ArrayList<JogadorCaracteristicas> jogadores) {
+        if(aTipocor!=null){
         for (int i = 8; i >= 1; i--) {
             for (int j = 1; j < 9; j++) {
                 board[i][j].removePiece();
@@ -406,6 +450,8 @@ public class Jogador extends javax.swing.JFrame {
                 }
             }
         }
+        }
+        if(aTipoCorFantasma!=null){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 4; j++) {
                 boardpecas[i][j].removePiece();
@@ -415,7 +461,32 @@ public class Jogador extends javax.swing.JFrame {
                 }
             }
         }
-        
+        }
+        if(aMensagens!=null){
+            TextChat.setText("");
+        for (int i = eu.getIndex(); i < aMensagens.size(); i++) {
+            TextChat.setText(TextChat.getText()+""+aMensagens.get(i).getHora()+" "+aMensagens.get(i).getNome()+": "+aMensagens.get(i).getMensagem()+"\n");
+        }
+        }
+        if(jogadores!=null){
+             TextObservador.setText("");
+        LabelJogador1.setText("");
+        BotaoSentar1.setEnabled(true);
+        LabelJogador2.setText("");
+        BotaoSentar2.setEnabled(true);
+        for (int i = 0; i < jogadores.size(); i++) {
+                  if(jogadores.get(i).isTipoJogador()==-1) TextObservador.setText(TextObservador.getText()+jogadores.get(i).getNome()+"\n");
+                  if(jogadores.get(i).isTipoJogador()==1){    
+                      LabelJogador1.setText(jogadores.get(i).getNome());
+                    BotaoSentar1.setEnabled(false);
+                  }
+                  if(jogadores.get(i).isTipoJogador()==2) {
+                      LabelJogador2.setText(jogadores.get(i).getNome());
+                      BotaoSentar2.setEnabled(false);
+                  }
+ 
+        }
+        }
     }
 
     public int stringNumero(String letra) {
@@ -471,22 +542,15 @@ public class Jogador extends javax.swing.JFrame {
         return tipocor;
     }
 
-    public void colocaPecaTabuleiroFantasma(String peca) {
-        int[] cortipo = tipoCorF(peca);
-        int valor = 0;
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (tipoCorTabuleiroFantasma[i][j] == null && valor == 0) {
-                    boardpecas[i][j].setPiece(cortipo[0], cortipo[1]);
-                    tipoCorTabuleiroFantasma[i][j] = peca;
-                    valor = 1;
-                }
-            }
-        }
-    }
+  
     private void BotaoSentar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSentar1ActionPerformed
         try {
-            if(eu.getObjRemoto().sentar(eu,0))botoesJogadores();
+            JogadorCaracteristicas novoeu=null;
+            novoeu=objRemoto.sentar(eu,0);
+            if(novoeu.isTipoJogador()!=eu.isTipoJogador()){
+                botoesJogadores();
+                eu=novoeu;
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
         }      
@@ -521,7 +585,12 @@ public class Jogador extends javax.swing.JFrame {
     }
 
     private void BotaoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoEnviarMsgActionPerformed
-        // TODO add your handling code here:
+        try {
+            objRemoto.adicionaMensagem(new Mensagem(sdf.format(Calendar.getInstance().getTime()),eu.getNome(),TextMensagem.getText()));
+            TextMensagem.setText("");
+        } catch (RemoteException ex) {
+            Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_BotaoEnviarMsgActionPerformed
 
     private void TextMensagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextMensagemActionPerformed
@@ -546,21 +615,22 @@ public class Jogador extends javax.swing.JFrame {
                 nome=TextNome.getText();
             if(nome!=null && url!=null && porto!=0){
             //cria o rmiregistry e retorna referencia para o registry no host e porto especificado
-            Registry reg = LocateRegistry.getRegistry(url, porto);
+             reg = LocateRegistry.getRegistry(url, porto);
             //Jogador client = new Jogador( );
             //InterfaceJogadores rem =(InterfaceJogadores) UnicastRemoteObject.exportObject(client,1099);
-            ExtendeUnicast client = new ExtendeUnicast(this);
+            client = new ExtendeUnicast(this);
             reg.rebind("jogador1",client);//indentificador do cliente remoto
             //procura os objetos remotos registados, ao qual nos podemos ligar
             objRemoto = (InterfaceXadrez) reg.lookup("jogador");           //pedir opcao
-            if(objRemoto.verificaNome(nome)==false){
-                int tipo=objRemoto.verificaTipoJogador();
-                eu=new JogadorCaracteristicas(nome, 0, client, objRemoto, tipo);
-                objRemoto.Jogador(eu);
+            
+                eu=new JogadorCaracteristicas(nome, 0, client, objRemoto, 0);
+                eu=objRemoto.Jogador(eu);
+                if(eu.getIndex()!=-1){
                 tipoCor=objRemoto.devolveArrayPrincipal();
                 tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
-                pecasDefault(tipoCor, tipoCorTabuleiroFantasma);
-                if(tipo!=-1){
+                mensagens =objRemoto.enviaMensagens();
+                pecasDefault(tipoCor, tipoCorTabuleiroFantasma,mensagens,null);
+                if(eu.isTipoJogador()!=-1){
                    botoesJogadores();
                 }
 
@@ -594,6 +664,7 @@ public class Jogador extends javax.swing.JFrame {
         try {
             objRemoto.desconectar(eu.getNome());
             botoesinicio();
+            botoesSair();
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -602,7 +673,12 @@ public class Jogador extends javax.swing.JFrame {
 
     private void BotaoSentar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSentar2ActionPerformed
         try {
-            if(eu.getObjRemoto().sentar(eu,1))botoesJogadores();
+            JogadorCaracteristicas novoeu=null;
+            novoeu=objRemoto.sentar(eu,1);
+            if(novoeu.isTipoJogador()!=eu.isTipoJogador()){
+                botoesJogadores();
+                eu=novoeu;
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -610,8 +686,11 @@ public class Jogador extends javax.swing.JFrame {
 
     private void BotaoObservadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoObservadorActionPerformed
         try {
-            if(objRemoto.observar(eu)){
+            JogadorCaracteristicas novoeu=null;
+            novoeu=objRemoto.observar(eu);
+            if(novoeu.isTipoJogador()!=eu.isTipoJogador()){
                 botoesObservador();
+                eu=novoeu;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
@@ -626,7 +705,7 @@ public class Jogador extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_BotaoForaActionPerformed
-
+    
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -636,7 +715,7 @@ public class Jogador extends javax.swing.JFrame {
                 interf.setVisible(true);
             }
         });
-
+      
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

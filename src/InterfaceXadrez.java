@@ -21,14 +21,14 @@ public interface InterfaceXadrez extends Remote{
    public boolean pecasForaTabuleiro() throws RemoteException;
    public boolean jogada(int x,String y,int x2,String y2,String tipoCorPeca,String nome) throws RemoteException;
    public String verificaCasa(int x,String y)throws RemoteException;
-   public boolean Jogador (JogadorCaracteristicas jogador) throws RemoteException;
+   public JogadorCaracteristicas Jogador (JogadorCaracteristicas jogador) throws RemoteException;
    public String[][] devolveArrayPrincipal ()throws RemoteException;
    public String[][] devolveArrayFora ()throws RemoteException;
+   public ArrayList<Mensagem> enviaMensagens() throws RemoteException;
    public int verificaTipoJogador() throws RemoteException;
-   public boolean verificaNome(String aNome)throws RemoteException;
    public void desconectar(String nome)throws RemoteException;
-   public boolean sentar(JogadorCaracteristicas jogador,int cadeira)throws RemoteException;
-      public boolean observar(JogadorCaracteristicas jogador)throws RemoteException;
-
+   public JogadorCaracteristicas sentar(JogadorCaracteristicas jogador,int cadeira)throws RemoteException;
+   public JogadorCaracteristicas observar(JogadorCaracteristicas jogador)throws RemoteException;
+   public boolean adicionaMensagem(Mensagem mensagem)throws RemoteException;
 
 }

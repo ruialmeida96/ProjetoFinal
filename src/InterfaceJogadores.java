@@ -18,6 +18,9 @@ import javax.swing.JTextArea;
  */
 public interface InterfaceJogadores extends Remote{
     
-   public void alteraTabuleiroAposJogo(String [][] tipoCor,String [][] tipoCorTabuleiroFantasma,InterfaceXadrez objRemoto)throws RemoteException;
+   public void alteraTabuleiroAposJogo(String [][] tipoCor,String [][] tipoCorTabuleiroFantasma,InterfaceXadrez objRemoto,ArrayList <Mensagem> mensagem)throws RemoteException;
    public void atualizaTabelaObservadores(ArrayList<JogadorCaracteristicas> jogadores)throws RemoteException;
+   public void mensagensAltera(Mensagem mensagem)throws RemoteException;
+   public void utilizadoresAltera(JogadorCaracteristicas jogador,int tipoAntigo)throws RemoteException;
+
 }

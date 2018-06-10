@@ -50,6 +50,10 @@ public class JogadorCaracteristicas implements Serializable
         return tipoJogador;
     }
 
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     public void setTipoJogador(int tipoJogador) {
         this.tipoJogador = tipoJogador;
     }

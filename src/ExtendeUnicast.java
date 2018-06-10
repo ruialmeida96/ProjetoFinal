@@ -22,15 +22,24 @@ public class ExtendeUnicast extends UnicastRemoteObject implements InterfaceJoga
         jogador=aJogador;
     }
 
-    public void alteraTabuleiroAposJogo(String [][] tipoCor,String [][] tipoCorTabuleiroFantasma,InterfaceXadrez objRemoto) throws RemoteException {
+    public void alteraTabuleiroAposJogo(String [][] tipoCor,String [][] tipoCorTabuleiroFantasma,InterfaceXadrez objRemoto,ArrayList<Mensagem> mensagem) throws RemoteException {
                 tipoCor=objRemoto.devolveArrayPrincipal();
                 tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
-                jogador.pecasDefault(tipoCor, tipoCorTabuleiroFantasma);
+                jogador.pecasDefault(tipoCor, tipoCorTabuleiroFantasma,mensagem,null);
     }
 
     public void atualizaTabelaObservadores(ArrayList<JogadorCaracteristicas> jogadores) throws RemoteException {
-                jogador.alteraObservadores(jogadores);
+                jogador.pecasDefault(null, null,null,jogadores);
     }
+    public void mensagensAltera(Mensagem mensagem){
+        jogador.atualizaMensagens(mensagem);
+    }
+
+    public void utilizadoresAltera(JogadorCaracteristicas aJogador,int tipoAntigo) throws RemoteException {
+        jogador.utilizadorAltera(aJogador,tipoAntigo);
+    }
+
+   
     
     
  
