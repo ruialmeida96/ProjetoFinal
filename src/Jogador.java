@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.rmi.NotBoundException;
 
 import java.rmi.RemoteException;
@@ -19,11 +21,11 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 
 public class Jogador extends javax.swing.JFrame {
-    private javax.swing.JFrame frame;
     private String url = "127.0.0.1";
-    private static  Registry reg = null;
+    private Registry reg = null;
     private ImageIcon imgSair;
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
     private SquarePanel[][] board = new SquarePanel[9][9];
@@ -35,7 +37,7 @@ public class Jogador extends javax.swing.JFrame {
     private  InterfaceXadrez objRemoto =null;
     private int jog1 = -1;
     private JogadorCaracteristicas eu=null;
-    private static ExtendeUnicast client=null;
+    private ExtendeUnicast client=null;
     private String jog1s = null,pecaJog1=null;
     private ArrayList <Mensagem> mensagens=null;
 
@@ -353,7 +355,7 @@ public class Jogador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botoesinicio() {
-        //BotaoSair.setEnabled(false);
+        BotaoSair.setEnabled(false);
         BotaoSentar1.setEnabled(false);
         BotaoEnviarMsg.setEnabled(false);
         BotaoObservador.setEnabled(false);
@@ -375,6 +377,7 @@ public class Jogador extends javax.swing.JFrame {
          BotaoFora.setEnabled(false);
          PanelTabuleiro.setEnabled(false);
          PanelPecas.setEnabled(false);
+         BotaoSair.setEnabled(true);
     }
     private void botoesSair(){
         TextMensagem.setText("");
@@ -384,13 +387,14 @@ public class Jogador extends javax.swing.JFrame {
         BotaoEntrar.setEnabled(true);
     }
     private void botoesJogadores(){
-                BotaoEntrar.setEnabled(false);
+                    BotaoEntrar.setEnabled(false);
                     BotaoObservador.setEnabled(true);
                     BotaoOrdenar.setEnabled(true);
                     BotaoEnviarMsg.setEnabled(true);
                     BotaoFora.setEnabled(true);
                     PanelTabuleiro.setEnabled(true);
                     PanelPecas.setEnabled(true);
+                    BotaoSair.setEnabled(true);
     }
     
    public void atualizaMensagens(Mensagem aMensagens){//atualiza adicionando uma mensagem
@@ -613,7 +617,7 @@ public class Jogador extends javax.swing.JFrame {
             }while(porto<0 || porto>4000);
                 url=TextIp.getText();
                 nome=TextNome.getText();
-            if(nome!=null && url!=null && porto!=0){
+            if(nome!=null && url!=null && porto!=0 && !TextNome.getText().equals("")){
             //cria o rmiregistry e retorna referencia para o registry no host e porto especificado
              reg = LocateRegistry.getRegistry(url, porto);
             //Jogador client = new Jogador( );
@@ -632,9 +636,21 @@ public class Jogador extends javax.swing.JFrame {
                 pecasDefault(tipoCor, tipoCorTabuleiroFantasma,mensagens,null);
                 if(eu.isTipoJogador()!=-1){
                    botoesJogadores();
+                }else{
+                    botoesObservador();
                 }
-
-                
+                this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                this.addWindowListener(new WindowAdapter() {
+              
+                public void windowClosing(WindowEvent event) {
+                    try {
+                        objRemoto.desconectar(eu.getNome());
+                        System.exit(0);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
             }
             //avisa utilizador que nome já está ocupado
             }
@@ -660,6 +676,8 @@ public class Jogador extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BotaoOrdenarActionPerformed
 
+    
+    
     private void BotaoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSairActionPerformed
         try {
             objRemoto.desconectar(eu.getNome());
