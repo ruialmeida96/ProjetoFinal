@@ -492,7 +492,46 @@ public class Jogador extends javax.swing.JFrame {
         }
         }
     }
+        private static boolean validation(String ip) {
+        //verificar se a string é valida ou não
+        if (ip == null || ip.isEmpty()) {
+            return false;
+            //se a string for valida, entra dentro deste else
+        } else {
+            //verificar que o ip é localhost, se pretendermos adicionar esse ip como localhost
+            if (ip.equalsIgnoreCase("localhost") == true || ip.equalsIgnoreCase("127.0.0.1")) {
+                return true;
+            }
+            //verificar se a string tem 3 pontos, pontos que separam as diferentes divisoes do ip address
+            String[] parts = ip.split("\\.");
+            if (parts.length != 4) {
+                //System.out.println("IP não contem 4 partes que o definem entre os pontos\n");
+                return false;
+            }
 
+            //verificar se as varias divisões do ip address, se os numeros se encontram entre 0 e 255
+            int x = 1;
+            for (String s : parts) {
+                if (x == 1) {
+                    int i = Integer.parseInt(s);
+                    if ((i < 224) || (i > 239)) {
+                        //System.out.println("Valores não dentro dos parametros (entre 224 e 239)\n");
+                        return false;
+                    }
+                } else {
+                    int e = Integer.parseInt(s);
+                    if ((e < 0) || (e > 255)) {
+                        // System.out.println("Valores não dentro dos parametros (entre 0 e 255)\n");
+                        return false;
+                    }
+                }
+                x++;
+            }
+
+            //System.out.println("IP valido\n");
+            return true;
+        }
+    }
     public int stringNumero(String letra) {
         if (letra.equals("a")) {
             return 1;
@@ -611,13 +650,11 @@ public class Jogador extends javax.swing.JFrame {
         try {
             // formato URL de RMI: "//host:port/name"
             //mostrar os nomes ativos  
-            do{
+          
                  porto=Integer.parseInt(TextPorto.getText());
-               if(porto>0 || porto<4000);//introduza porto entre x e y.
-            }while(porto<0 || porto>4000);
                 url=TextIp.getText();
                 nome=TextNome.getText();
-            if(nome!=null && url!=null && porto!=0 && !TextNome.getText().equals("")){
+            if(validation(url) && porto>0 && porto<4001 && !TextNome.getText().equals("")){
             //cria o rmiregistry e retorna referencia para o registry no host e porto especificado
              reg = LocateRegistry.getRegistry(url, porto);
             //Jogador client = new Jogador( );
