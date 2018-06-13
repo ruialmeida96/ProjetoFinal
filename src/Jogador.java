@@ -22,8 +22,10 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class Jogador extends javax.swing.JFrame {
+
     private String url = "127.0.0.1";
     private Registry reg = null;
     private ImageIcon imgSair;
@@ -34,12 +36,12 @@ public class Jogador extends javax.swing.JFrame {
     private String[][] tipoCorTabuleiroFantasma;
     private String[] letras = {"a", "b", "c", "d", "e", "f", "g", "h"};
     private String[] letras2 = {"i", "j", "k", "l"};
-    private  InterfaceXadrez objRemoto =null;
+    private InterfaceXadrez objRemoto = null;
     private int jog1 = -1;
-    private JogadorCaracteristicas eu=null;
-    private ExtendeUnicast client=null;
-    private String jog1s = null,pecaJog1=null;
-    private ArrayList <Mensagem> mensagens=null;
+    private JogadorCaracteristicas eu = null;
+    private ExtendeUnicast client = null;
+    private String jog1s = null, pecaJog1 = null;
+    private ArrayList<Mensagem> mensagens = null;
 
     public Jogador() {
         initComponents();
@@ -61,7 +63,7 @@ public class Jogador extends javax.swing.JFrame {
                 PanelTabuleiro.add(sqPanel);
             }
         }
-        
+
         //for peças fora de jogo
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 4; j++) {
@@ -336,14 +338,19 @@ public class Jogador extends javax.swing.JFrame {
                                     .addComponent(BotaoEnviarMsg)))
                             .addComponent(PanelTabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(PanelPecas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(LabelJogador2)
-                                .addComponent(BotaoSentar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(BotaoOrdenar))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(BotaoFora))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(LabelJogador2)
+                                    .addComponent(BotaoSentar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(29, 29, 29))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(BotaoOrdenar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(BotaoFora)
+                                .addContainerGap())))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -354,6 +361,7 @@ public class Jogador extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 //ativa e inativa botoes quando jogador antes de conectar ao jogo
+
     private void botoesinicio() {
         BotaoSair.setEnabled(false);
         BotaoSentar1.setEnabled(false);
@@ -361,164 +369,184 @@ public class Jogador extends javax.swing.JFrame {
         BotaoObservador.setEnabled(false);
         BotaoOrdenar.setEnabled(false);
         PanelTabuleiro.setEnabled(false);
-         BotaoSentar2.setEnabled(false);
-         BotaoFora.setEnabled(false);
-         LabelJogador1.setText("");
-         LabelJogador2.setText("");
-         PanelTabuleiro.setEnabled(false);
-         PanelPecas.setEnabled(false);
-   }
+        BotaoSentar2.setEnabled(false);
+        BotaoFora.setEnabled(false);
+        LabelJogador1.setText("");
+        LabelJogador2.setText("");
+        PanelTabuleiro.setEnabled(false);
+        PanelPecas.setEnabled(false);
+    }
+
     //ativa e inativa botoes quando observador conecta ao jogo
-    private void botoesObservador(){
+    private void botoesObservador() {
         BotaoEntrar.setEnabled(false);
         BotaoEnviarMsg.setEnabled(false);
         BotaoObservador.setEnabled(false);
         BotaoOrdenar.setEnabled(false);
         PanelTabuleiro.setEnabled(false);
-         BotaoFora.setEnabled(false);
-         PanelTabuleiro.setEnabled(false);
-         PanelPecas.setEnabled(false);
-         BotaoSair.setEnabled(true);
+        BotaoFora.setEnabled(false);
+        PanelTabuleiro.setEnabled(false);
+        PanelPecas.setEnabled(false);
+        BotaoSair.setEnabled(true);
     }
     //ativa e inativa botoes quando jogador/observador desconecta ao jogo
 
-    private void botoesSair(){
+    private void botoesSair() {
         TextMensagem.setText("");
         TextChat.setText("");
         TextObservador.setText("");
         BotaoSair.setEnabled(false);
         BotaoEntrar.setEnabled(true);
     }
+
     //ativa e inativa botoes quando jogador conecta ao jogo
-    private void botoesJogadores(){
-                    BotaoEntrar.setEnabled(false);
-                    BotaoObservador.setEnabled(true);
-                    BotaoOrdenar.setEnabled(true);
-                    BotaoEnviarMsg.setEnabled(true);
-                    BotaoFora.setEnabled(true);
-                    PanelTabuleiro.setEnabled(true);
-                    PanelPecas.setEnabled(true);
-                    BotaoSair.setEnabled(true);
+    private void botoesJogadores() {
+        BotaoEntrar.setEnabled(false);
+        BotaoObservador.setEnabled(true);
+        BotaoOrdenar.setEnabled(true);
+        BotaoEnviarMsg.setEnabled(true);
+        BotaoFora.setEnabled(true);
+        PanelTabuleiro.setEnabled(true);
+        PanelPecas.setEnabled(true);
+        BotaoSair.setEnabled(true);
     }
+    
+    private void textFieldsON(){
+        TextIp.setEditable(true);
+        TextPorto.setEditable(true);
+        TextNome.setEditable(true);
+    }
+    
+    private void textFieldsOFF(){
+        TextIp.setEditable(false);
+        TextPorto.setEditable(false);
+        TextNome.setEditable(false);;
+    }
+
     //metodo que atualiza o chat, adicionando a nova mensagem
-   public void atualizaMensagens(Mensagem aMensagens){//atualiza adicionando uma mensagem
-            TextChat.setText(TextChat.getText()+""+aMensagens.getHora()+" "+aMensagens.getNome()+": "+aMensagens.getMensagem()+"\n");
-   }
-   //se utilizador sair/entrar ou mudar para cadeira ou passar para observador, este metodo faz essa alteracao na interface
-    public void utilizadorAltera(JogadorCaracteristicas jogador,int tipoAntigo){
+    public void atualizaMensagens(Mensagem aMensagens) {//atualiza adicionando uma mensagem
+        TextChat.setText(TextChat.getText() + "" + aMensagens.getHora() + " " + aMensagens.getNome() + ": " + aMensagens.getMensagem() + "\n");
+    }
+
+    //se utilizador sair/entrar ou mudar para cadeira ou passar para observador, este metodo faz essa alteracao na interface
+    public void utilizadorAltera(JogadorCaracteristicas jogador, int tipoAntigo) {
         //se for jogador
-        if(jogador.isTipoJogador()==1){
+        if (jogador.isTipoJogador() == 1) {
             //passa para primeira cadeira e botao sentar fica inativo
             LabelJogador1.setText(jogador.getNome());
             BotaoSentar1.setEnabled(false);
             //se o que se sentou estava sentado na cadeira 2, mete ativa cadeira 2
-            if(tipoAntigo==2){
-                 LabelJogador2.setText("");
+            if (tipoAntigo == 2) {
+                LabelJogador2.setText("");
                 BotaoSentar2.setEnabled(true);
-            //se jogador que se sentou na cadeira 2 era observador, elimina o seu nome da tabela de observadores
-            }else if(tipoAntigo==-1){
-                TextObservador.setText(TextObservador.getText().replaceAll(jogador.getNome(),""));//nao funciona!!
+                //se jogador que se sentou na cadeira 2 era observador, elimina o seu nome da tabela de observadores
+            } else if (tipoAntigo == -1) {
+                TextObservador.setText(TextObservador.getText().replaceAll(jogador.getNome(), ""));//nao funciona!!
             }
-         //se jogador se sentou na cadeira 2, desabilita o botao para sentar nessa cadeira e muda nome
-        }else if(jogador.isTipoJogador()==2){
+            //se jogador se sentou na cadeira 2, desabilita o botao para sentar nessa cadeira e muda nome
+        } else if (jogador.isTipoJogador() == 2) {
             LabelJogador2.setText(jogador.getNome());
             BotaoSentar2.setEnabled(false);
             //se o que se sentou estava sentado na cadeira 1, mete ativa cadeira 1
-             if(tipoAntigo==1){
-                 LabelJogador1.setText("");
+            if (tipoAntigo == 1) {
+                LabelJogador1.setText("");
                 BotaoSentar1.setEnabled(true);
                 //se jogador que se sentou na cadeira 2 era observador, elimina o seu nome da tabela de observadores
-            }else if(tipoAntigo==-1){
-                TextObservador.setText(TextObservador.getText().replaceAll(jogador.getNome(),""));//nao funciona!!
+            } else if (tipoAntigo == -1) {
+                TextObservador.setText(TextObservador.getText().replaceAll(jogador.getNome(), ""));//nao funciona!!
             }
-         //se jogador passou para observador adiciona o á tabela de observadores
-        }else if(jogador.isTipoJogador()==-1){
-            TextObservador.setText(TextObservador.getText()+jogador.getNome()+"\n");
+            //se jogador passou para observador adiciona o á tabela de observadores
+        } else if (jogador.isTipoJogador() == -1) {
+            TextObservador.setText(TextObservador.getText() + jogador.getNome() + "\n");
             //se o que se sentou estava sentado na cadeira 2, mete ativa cadeira 2
-             if(tipoAntigo==2){
-                 LabelJogador2.setText("");
+            if (tipoAntigo == 2) {
+                LabelJogador2.setText("");
                 BotaoSentar2.setEnabled(true);
                 //se o que se sentou estava sentado na cadeira 1, mete ativa cadeira 1
-            }else if(tipoAntigo==1){
+            } else if (tipoAntigo == 1) {
                 LabelJogador1.setText("");
                 BotaoSentar1.setEnabled(true);
             }
-         //se o saiu do jogo
-        }else if(jogador.isTipoJogador()==0){
-                //se ele estava sentado na cadeira 2, mete habilitado o botao para sentar
-                if(tipoAntigo==2){
-                 LabelJogador2.setText("");
+            //se o saiu do jogo
+        } else if (jogador.isTipoJogador() == 0) {
+            //se ele estava sentado na cadeira 2, mete habilitado o botao para sentar
+            if (tipoAntigo == 2) {
+                LabelJogador2.setText("");
                 BotaoSentar2.setEnabled(true);
-                 //se ele estava sentado na cadeira 1, mete habilitado o botao para sentar
-            }else if(tipoAntigo==1){
+                //se ele estava sentado na cadeira 1, mete habilitado o botao para sentar
+            } else if (tipoAntigo == 1) {
                 LabelJogador1.setText("");
                 BotaoSentar1.setEnabled(true);
-                 //se ele estava como observador, retira-o da tabela de observadores
-            }else{
-                TextObservador.setText(TextObservador.getText().replaceAll(jogador.getNome(),""));//nao funciona!!
+                //se ele estava como observador, retira-o da tabela de observadores
+            } else {
+                TextObservador.setText(TextObservador.getText().replaceAll(jogador.getNome(), ""));//nao funciona!!
             }
         }
     }
+
     //metodo que constroi a interface de raiz, tabuleiros,mensagens, jogadores
-    public void pecasDefault(String [][] aTipocor,String [][] aTipoCorFantasma,ArrayList<Mensagem> aMensagens,ArrayList<JogadorCaracteristicas> jogadores) {
+    public void pecasDefault(String[][] aTipocor, String[][] aTipoCorFantasma, ArrayList<Mensagem> aMensagens, ArrayList<JogadorCaracteristicas> jogadores) {
         //se for para montar tabuleiro principal
-        if(aTipocor!=null){
-        for (int i = 8; i >= 1; i--) {
-            for (int j = 1; j < 9; j++) {
-                board[i][j].removePiece();//remove imagem que la podia ter
-                if(aTipocor[i][j]!=null){//adiciona peça se no array devolvido pelo servidor tiver peça nessa possição
-                    String var=aTipocor[i][j];
-                    board[i][j].setPiece(Character.getNumericValue(var.charAt(1)),Character.getNumericValue(var.charAt(0)));
+        if (aTipocor != null) {
+            for (int i = 8; i >= 1; i--) {
+                for (int j = 1; j < 9; j++) {
+                    board[i][j].removePiece();//remove imagem que la podia ter
+                    if (aTipocor[i][j] != null) {//adiciona peça se no array devolvido pelo servidor tiver peça nessa possição
+                        String var = aTipocor[i][j];
+                        board[i][j].setPiece(Character.getNumericValue(var.charAt(1)), Character.getNumericValue(var.charAt(0)));
+                    }
                 }
             }
         }
-        }
-         //se for para montar tabuleiro fora
-        if(aTipoCorFantasma!=null){
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 4; j++) {
-                boardpecas[i][j].removePiece();//remove imagem que la podia ter
-                if(aTipoCorFantasma[i][j]!=null){//adiciona peça se no array devolvido pelo servidor tiver peça nessa possição 
-                    String var=aTipoCorFantasma[i][j];
-                    boardpecas[i][j].setPiece(Character.getNumericValue(var.charAt(1)),Character.getNumericValue(var.charAt(0)));
+        //se for para montar tabuleiro fora
+        if (aTipoCorFantasma != null) {
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 4; j++) {
+                    boardpecas[i][j].removePiece();//remove imagem que la podia ter
+                    if (aTipoCorFantasma[i][j] != null) {//adiciona peça se no array devolvido pelo servidor tiver peça nessa possição 
+                        String var = aTipoCorFantasma[i][j];
+                        boardpecas[i][j].setPiece(Character.getNumericValue(var.charAt(1)), Character.getNumericValue(var.charAt(0)));
+                    }
                 }
             }
         }
-        }
-         //se for para montar mensagens
-        if(aMensagens!=null){
+        //se for para montar mensagens
+        if (aMensagens != null) {
             TextChat.setText("");
             //mostra mensagens apartir do index que lhe foi atribuido quando entrou no sistema
-        for (int i = eu.getIndex(); i < aMensagens.size(); i++) {
-            TextChat.setText(TextChat.getText()+""+aMensagens.get(i).getHora()+" "+aMensagens.get(i).getNome()+": "+aMensagens.get(i).getMensagem()+"\n");
+            for (int i = eu.getIndex(); i < aMensagens.size(); i++) {
+                TextChat.setText(TextChat.getText() + "" + aMensagens.get(i).getHora() + " " + aMensagens.get(i).getNome() + ": " + aMensagens.get(i).getMensagem() + "\n");
+            }
         }
-        }
-         //se for para montar jogadore/observadores
-        if(jogadores!=null){
-             TextObservador.setText("");
-        LabelJogador1.setText("");
-        BotaoSentar1.setEnabled(true);
-        LabelJogador2.setText("");
-        BotaoSentar2.setEnabled(true);
-        for (int i = 0; i < jogadores.size(); i++) {
-            //se for observador adiciona na tabela
-                  if(jogadores.get(i).isTipoJogador()==-1) TextObservador.setText(TextObservador.getText()+jogadores.get(i).getNome()+"\n");
-                  //se for jogador, senta-o na cadeira 1
-                  if(jogadores.get(i).isTipoJogador()==1){    
-                      LabelJogador1.setText(jogadores.get(i).getNome());
+        //se for para montar jogadore/observadores
+        if (jogadores != null) {
+            TextObservador.setText("");
+            LabelJogador1.setText("");
+            BotaoSentar1.setEnabled(true);
+            LabelJogador2.setText("");
+            BotaoSentar2.setEnabled(true);
+            for (int i = 0; i < jogadores.size(); i++) {
+                //se for observador adiciona na tabela
+                if (jogadores.get(i).isTipoJogador() == -1) {
+                    TextObservador.setText(TextObservador.getText() + jogadores.get(i).getNome() + "\n");
+                }
+                //se for jogador, senta-o na cadeira 1
+                if (jogadores.get(i).isTipoJogador() == 1) {
+                    LabelJogador1.setText(jogadores.get(i).getNome());
                     BotaoSentar1.setEnabled(false);
-                  }
-                  //se for jogador senta-o na cadeira 2
-                  if(jogadores.get(i).isTipoJogador()==2) {
-                      LabelJogador2.setText(jogadores.get(i).getNome());
-                      BotaoSentar2.setEnabled(false);
-                  }
- 
-        }
+                }
+                //se for jogador senta-o na cadeira 2
+                if (jogadores.get(i).isTipoJogador() == 2) {
+                    LabelJogador2.setText(jogadores.get(i).getNome());
+                    BotaoSentar2.setEnabled(false);
+                }
+
+            }
         }
     }
+
     //valida se ip é valido
-        private static boolean validation(String ip) {
+    private static boolean validation(String ip) {
         //verificar se a string é valida ou não
         if (ip == null || ip.isEmpty()) {
             return false;
@@ -558,7 +586,8 @@ public class Jogador extends javax.swing.JFrame {
             return true;
         }
     }
-     //retorna o numero que corresponde a cada letra (tabuleiro principar)
+    //retorna o numero que corresponde a cada letra (tabuleiro principar)
+
     public int stringNumero(String letra) {
         if (letra.equals("a")) {
             return 1;
@@ -587,6 +616,7 @@ public class Jogador extends javax.swing.JFrame {
 
         return 0;
     }
+
     //devolve numero que corresponde a cada letra(tabuleiro secundario)
     public int stringNumero2(String letra) {
         if (letra.equals("i")) {
@@ -604,6 +634,7 @@ public class Jogador extends javax.swing.JFrame {
 
         return -1;
     }
+
     //coloca em array o tipo e cor da peça
     public int[] tipoCorF(String peca) {
         int[] tipocor = new int[2];
@@ -612,51 +643,49 @@ public class Jogador extends javax.swing.JFrame {
         return tipocor;
     }
 
-  
+
     private void BotaoSentar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSentar1ActionPerformed
         try {
-            JogadorCaracteristicas novoeu=null;
-            novoeu=objRemoto.sentar(eu,0);
-            if(novoeu.isTipoJogador()!=eu.isTipoJogador()){
+            JogadorCaracteristicas novoeu = null;
+            novoeu = objRemoto.sentar(eu, 0);
+            if (novoeu.isTipoJogador() != eu.isTipoJogador()) {
                 botoesJogadores();
-                eu=novoeu;
+                eu = novoeu;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
-        }      
+        }
     }//GEN-LAST:event_BotaoSentar1ActionPerformed
 
     public void selected(int x, String y) throws RemoteException {
-        
+
         if (jog1 == -1) {
             if (stringNumero(y) != 0) {//se for do tabuleiro principal
-                pecaJog1=objRemoto.verificaCasa(x, y);
+                pecaJog1 = objRemoto.verificaCasa(x, y);
                 if (pecaJog1 != null) {
                     jog1 = x;
                     jog1s = y;
                 }
             } else {//se for tabuleiro de fora
-                pecaJog1=objRemoto.verificaCasa(x, y);
+                pecaJog1 = objRemoto.verificaCasa(x, y);
                 if (pecaJog1 != null) {
                     jog1 = x;
                     jog1s = y;
                 }
             }
         } else {
-                objRemoto.jogada(jog1, jog1s, x, y, pecaJog1,eu.getNome());
-                
-                
+            objRemoto.jogada(jog1, jog1s, x, y, pecaJog1, eu.getNome());
+
             jog1 = -1;
             jog1s = null;
 
-        
         }
 
     }
 
     private void BotaoEnviarMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoEnviarMsgActionPerformed
         try {
-            objRemoto.adicionaMensagem(new Mensagem(sdf.format(Calendar.getInstance().getTime()),eu.getNome(),TextMensagem.getText()));
+            objRemoto.adicionaMensagem(new Mensagem(sdf.format(Calendar.getInstance().getTime()), eu.getNome(), TextMensagem.getText()));
             TextMensagem.setText("");
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
@@ -672,57 +701,73 @@ public class Jogador extends javax.swing.JFrame {
     }//GEN-LAST:event_TextPortoActionPerformed
 
     private void BotaoEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoEntrarActionPerformed
-        int porto=0;
-        String url =null,nome=null;
+        int porto = 0;
+        String url = null, nome = null;
         try {
             // formato URL de RMI: "//host:port/name"
+
             //mostrar os nomes ativos  
-          
-                 porto=Integer.parseInt(TextPorto.getText());
-                url=TextIp.getText();
-                nome=TextNome.getText();
-            if(validation(url) && porto>0 && porto<4001 && !TextNome.getText().equals("")){
-            //cria o rmiregistry e retorna referencia para o registry no host e porto especificado
-             reg = LocateRegistry.getRegistry(url, porto);
-            //Jogador client = new Jogador( );
-            //InterfaceJogadores rem =(InterfaceJogadores) UnicastRemoteObject.exportObject(client,1099);
-            client = new ExtendeUnicast(this);
-            reg.rebind("jogador1",client);//indentificador do cliente remoto
-            //procura os objetos remotos registados, ao qual nos podemos ligar
-            objRemoto = (InterfaceXadrez) reg.lookup("jogador");           //pedir opcao
-            
-                eu=new JogadorCaracteristicas(nome, 0, client, objRemoto, 0);
-                eu=objRemoto.Jogador(eu);
-                if(eu.getIndex()!=-1){
-                tipoCor=objRemoto.devolveArrayPrincipal();
-                tipoCorTabuleiroFantasma=objRemoto.devolveArrayFora();
-                mensagens =objRemoto.enviaMensagens();
-                pecasDefault(tipoCor, tipoCorTabuleiroFantasma,mensagens,null);
-                if(eu.isTipoJogador()!=-1){
-                   botoesJogadores();
-                }else{
-                    botoesObservador();
-                }
-                this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                this.addWindowListener(new WindowAdapter() {
-              
-                public void windowClosing(WindowEvent event) {
-                    try {
-                        objRemoto.desconectar(eu.getNome());
-                        System.exit(0);
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
+            porto = Integer.parseInt(TextPorto.getText());
+            url = TextIp.getText();
+            nome = TextNome.getText();
+
+            if (validation(url)) {
+                if (porto > 0 && porto < 4001) {
+                    if (!TextNome.getText().equals("")) {
+                        //if (validation(url) && porto > 0 && porto < 4001 && !TextNome.getText().equals("")) {
+                        //cria o rmiregistry e retorna referencia para o registry no host e porto especificado
+                        reg = LocateRegistry.getRegistry(url, porto);
+                        //Jogador client = new Jogador( );
+                        //InterfaceJogadores rem =(InterfaceJogadores) UnicastRemoteObject.exportObject(client,1099);
+                        client = new ExtendeUnicast(this);
+                        reg.rebind("jogador1", client);//indentificador do cliente remoto
+                        //procura os objetos remotos registados, ao qual nos podemos ligar
+                        objRemoto = (InterfaceXadrez) reg.lookup("jogador");           //pedir opcao
+
+                        eu = new JogadorCaracteristicas(nome, 0, client, objRemoto, 0);
+                        eu = objRemoto.Jogador(eu);
+                        if (eu.getIndex() != -1) {
+                            tipoCor = objRemoto.devolveArrayPrincipal();
+                            tipoCorTabuleiroFantasma = objRemoto.devolveArrayFora();
+                            mensagens = objRemoto.enviaMensagens();
+                            pecasDefault(tipoCor, tipoCorTabuleiroFantasma, mensagens, null);
+                            if (eu.isTipoJogador() != -1) {
+                                botoesJogadores();
+                                textFieldsOFF();
+                            } else {
+                                botoesObservador();
+                                textFieldsOFF();
+                            }
+                            this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                            this.addWindowListener(new WindowAdapter() {
+
+                                public void windowClosing(WindowEvent event) {
+                                    try {
+                                        objRemoto.desconectar(eu.getNome());
+                                        System.exit(0);
+                                    } catch (RemoteException ex) {
+                                        Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                            });
+                        }
+                        System.out.println("avisa utilizador que nome já está ocupado");
+                        //avisa utilizador que nome já está ocupado
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Introduza um nome válido", "" + "Aviso", JOptionPane.INFORMATION_MESSAGE);
                     }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Introduza um Porto entre 1 e 4000", "" + "Aviso", JOptionPane.INFORMATION_MESSAGE);
                 }
-            });
-            }
-            //avisa utilizador que nome já está ocupado
+            }else{
+                JOptionPane.showMessageDialog(null, "Introduza um IP correto", "" + "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception e) {
             //Mensagem de aviso-introduz os dados!!
+            JOptionPane.showMessageDialog(null, "Introduza os dados necessarios para efetuar conexão", "" + "Aviso", JOptionPane.INFORMATION_MESSAGE);
             System.out.println(e);
         }
-        
+
 
     }//GEN-LAST:event_BotaoEntrarActionPerformed
 
@@ -734,32 +779,32 @@ public class Jogador extends javax.swing.JFrame {
         try {
             //parte de ordenar o tabuleiro todo
             objRemoto.ordenaTabuleiro();
-            
+
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_BotaoOrdenarActionPerformed
 
-    
-    
+
     private void BotaoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSairActionPerformed
         try {
             objRemoto.desconectar(eu.getNome());
             botoesinicio();
             botoesSair();
+            textFieldsON();
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
      }//GEN-LAST:event_BotaoSairActionPerformed
 
     private void BotaoSentar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSentar2ActionPerformed
         try {
-            JogadorCaracteristicas novoeu=null;
-            novoeu=objRemoto.sentar(eu,1);
-            if(novoeu.isTipoJogador()!=eu.isTipoJogador()){
+            JogadorCaracteristicas novoeu = null;
+            novoeu = objRemoto.sentar(eu, 1);
+            if (novoeu.isTipoJogador() != eu.isTipoJogador()) {
                 botoesJogadores();
-                eu=novoeu;
+                eu = novoeu;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
@@ -768,11 +813,11 @@ public class Jogador extends javax.swing.JFrame {
 
     private void BotaoObservadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoObservadorActionPerformed
         try {
-            JogadorCaracteristicas novoeu=null;
-            novoeu=objRemoto.observar(eu);
-            if(novoeu.isTipoJogador()!=eu.isTipoJogador()){
+            JogadorCaracteristicas novoeu = null;
+            novoeu = objRemoto.observar(eu);
+            if (novoeu.isTipoJogador() != eu.isTipoJogador()) {
                 botoesObservador();
-                eu=novoeu;
+                eu = novoeu;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
@@ -785,9 +830,9 @@ public class Jogador extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(Jogador.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_BotaoForaActionPerformed
-    
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -797,7 +842,7 @@ public class Jogador extends javax.swing.JFrame {
                 interf.setVisible(true);
             }
         });
-      
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

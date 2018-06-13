@@ -2,28 +2,16 @@
 import java.io.Serializable;
 import java.sql.Time;
 
+public class Mensagem implements Serializable {
 
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author jessica
- */
-public class Mensagem implements Serializable{
-    
     private String hora;
     private String nome;
     private String mensagem;
 
-    public Mensagem(String aHora,String aNome,String aMensagem) {
-        hora=aHora;
-        nome=aNome;
-        mensagem=aMensagem;
+    public Mensagem(String aHora, String aNome, String aMensagem) {
+        hora = aHora;
+        nome = aNome;
+        mensagem = aMensagem;
     }
 
     public String getHora() {
@@ -49,7 +37,5 @@ public class Mensagem implements Serializable{
     public void setMensagem(String mensagem) {
         this.mensagem = mensagem;
     }
-    
-    
-    
+
 }
