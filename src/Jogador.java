@@ -353,7 +353,7 @@ public class Jogador extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//ativa e inativa botoes quando jogador antes de conectar ao jogo
     private void botoesinicio() {
         BotaoSair.setEnabled(false);
         BotaoSentar1.setEnabled(false);
@@ -368,6 +368,7 @@ public class Jogador extends javax.swing.JFrame {
          PanelTabuleiro.setEnabled(false);
          PanelPecas.setEnabled(false);
    }
+    //ativa e inativa botoes quando observador conecta ao jogo
     private void botoesObservador(){
         BotaoEntrar.setEnabled(false);
         BotaoEnviarMsg.setEnabled(false);
@@ -379,6 +380,8 @@ public class Jogador extends javax.swing.JFrame {
          PanelPecas.setEnabled(false);
          BotaoSair.setEnabled(true);
     }
+    //ativa e inativa botoes quando jogador/observador desconecta ao jogo
+
     private void botoesSair(){
         TextMensagem.setText("");
         TextChat.setText("");
@@ -386,6 +389,7 @@ public class Jogador extends javax.swing.JFrame {
         BotaoSair.setEnabled(false);
         BotaoEntrar.setEnabled(true);
     }
+    //ativa e inativa botoes quando jogador conecta ao jogo
     private void botoesJogadores(){
                     BotaoEntrar.setEnabled(false);
                     BotaoObservador.setEnabled(true);
@@ -396,82 +400,100 @@ public class Jogador extends javax.swing.JFrame {
                     PanelPecas.setEnabled(true);
                     BotaoSair.setEnabled(true);
     }
-    
+    //metodo que atualiza o chat, adicionando a nova mensagem
    public void atualizaMensagens(Mensagem aMensagens){//atualiza adicionando uma mensagem
             TextChat.setText(TextChat.getText()+""+aMensagens.getHora()+" "+aMensagens.getNome()+": "+aMensagens.getMensagem()+"\n");
    }
-   
+   //se utilizador sair/entrar ou mudar para cadeira ou passar para observador, este metodo faz essa alteracao na interface
     public void utilizadorAltera(JogadorCaracteristicas jogador,int tipoAntigo){
+        //se for jogador
         if(jogador.isTipoJogador()==1){
+            //passa para primeira cadeira e botao sentar fica inativo
             LabelJogador1.setText(jogador.getNome());
             BotaoSentar1.setEnabled(false);
+            //se o que se sentou estava sentado na cadeira 2, mete ativa cadeira 2
             if(tipoAntigo==2){
                  LabelJogador2.setText("");
                 BotaoSentar2.setEnabled(true);
+            //se jogador que se sentou na cadeira 2 era observador, elimina o seu nome da tabela de observadores
             }else if(tipoAntigo==-1){
                 TextObservador.setText(TextObservador.getText().replaceAll(jogador.getNome(),""));//nao funciona!!
             }
+         //se jogador se sentou na cadeira 2, desabilita o botao para sentar nessa cadeira e muda nome
         }else if(jogador.isTipoJogador()==2){
             LabelJogador2.setText(jogador.getNome());
             BotaoSentar2.setEnabled(false);
+            //se o que se sentou estava sentado na cadeira 1, mete ativa cadeira 1
              if(tipoAntigo==1){
                  LabelJogador1.setText("");
                 BotaoSentar1.setEnabled(true);
+                //se jogador que se sentou na cadeira 2 era observador, elimina o seu nome da tabela de observadores
             }else if(tipoAntigo==-1){
                 TextObservador.setText(TextObservador.getText().replaceAll(jogador.getNome(),""));//nao funciona!!
             }
+         //se jogador passou para observador adiciona o á tabela de observadores
         }else if(jogador.isTipoJogador()==-1){
             TextObservador.setText(TextObservador.getText()+jogador.getNome()+"\n");
+            //se o que se sentou estava sentado na cadeira 2, mete ativa cadeira 2
              if(tipoAntigo==2){
                  LabelJogador2.setText("");
                 BotaoSentar2.setEnabled(true);
+                //se o que se sentou estava sentado na cadeira 1, mete ativa cadeira 1
             }else if(tipoAntigo==1){
                 LabelJogador1.setText("");
                 BotaoSentar1.setEnabled(true);
             }
+         //se o saiu do jogo
         }else if(jogador.isTipoJogador()==0){
-            //remover nome
+                //se ele estava sentado na cadeira 2, mete habilitado o botao para sentar
                 if(tipoAntigo==2){
                  LabelJogador2.setText("");
                 BotaoSentar2.setEnabled(true);
+                 //se ele estava sentado na cadeira 1, mete habilitado o botao para sentar
             }else if(tipoAntigo==1){
                 LabelJogador1.setText("");
                 BotaoSentar1.setEnabled(true);
+                 //se ele estava como observador, retira-o da tabela de observadores
             }else{
                 TextObservador.setText(TextObservador.getText().replaceAll(jogador.getNome(),""));//nao funciona!!
             }
         }
     }
-    
+    //metodo que constroi a interface de raiz, tabuleiros,mensagens, jogadores
     public void pecasDefault(String [][] aTipocor,String [][] aTipoCorFantasma,ArrayList<Mensagem> aMensagens,ArrayList<JogadorCaracteristicas> jogadores) {
+        //se for para montar tabuleiro principal
         if(aTipocor!=null){
         for (int i = 8; i >= 1; i--) {
             for (int j = 1; j < 9; j++) {
-                board[i][j].removePiece();
-                if(aTipocor[i][j]!=null){
+                board[i][j].removePiece();//remove imagem que la podia ter
+                if(aTipocor[i][j]!=null){//adiciona peça se no array devolvido pelo servidor tiver peça nessa possição
                     String var=aTipocor[i][j];
                     board[i][j].setPiece(Character.getNumericValue(var.charAt(1)),Character.getNumericValue(var.charAt(0)));
                 }
             }
         }
         }
+         //se for para montar tabuleiro fora
         if(aTipoCorFantasma!=null){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 4; j++) {
-                boardpecas[i][j].removePiece();
-                if(aTipoCorFantasma[i][j]!=null){
+                boardpecas[i][j].removePiece();//remove imagem que la podia ter
+                if(aTipoCorFantasma[i][j]!=null){//adiciona peça se no array devolvido pelo servidor tiver peça nessa possição 
                     String var=aTipoCorFantasma[i][j];
                     boardpecas[i][j].setPiece(Character.getNumericValue(var.charAt(1)),Character.getNumericValue(var.charAt(0)));
                 }
             }
         }
         }
+         //se for para montar mensagens
         if(aMensagens!=null){
             TextChat.setText("");
+            //mostra mensagens apartir do index que lhe foi atribuido quando entrou no sistema
         for (int i = eu.getIndex(); i < aMensagens.size(); i++) {
             TextChat.setText(TextChat.getText()+""+aMensagens.get(i).getHora()+" "+aMensagens.get(i).getNome()+": "+aMensagens.get(i).getMensagem()+"\n");
         }
         }
+         //se for para montar jogadore/observadores
         if(jogadores!=null){
              TextObservador.setText("");
         LabelJogador1.setText("");
@@ -479,11 +501,14 @@ public class Jogador extends javax.swing.JFrame {
         LabelJogador2.setText("");
         BotaoSentar2.setEnabled(true);
         for (int i = 0; i < jogadores.size(); i++) {
+            //se for observador adiciona na tabela
                   if(jogadores.get(i).isTipoJogador()==-1) TextObservador.setText(TextObservador.getText()+jogadores.get(i).getNome()+"\n");
+                  //se for jogador, senta-o na cadeira 1
                   if(jogadores.get(i).isTipoJogador()==1){    
                       LabelJogador1.setText(jogadores.get(i).getNome());
                     BotaoSentar1.setEnabled(false);
                   }
+                  //se for jogador senta-o na cadeira 2
                   if(jogadores.get(i).isTipoJogador()==2) {
                       LabelJogador2.setText(jogadores.get(i).getNome());
                       BotaoSentar2.setEnabled(false);
@@ -492,6 +517,7 @@ public class Jogador extends javax.swing.JFrame {
         }
         }
     }
+    //valida se ip é valido
         private static boolean validation(String ip) {
         //verificar se a string é valida ou não
         if (ip == null || ip.isEmpty()) {
@@ -532,6 +558,7 @@ public class Jogador extends javax.swing.JFrame {
             return true;
         }
     }
+     //retorna o numero que corresponde a cada letra (tabuleiro principar)
     public int stringNumero(String letra) {
         if (letra.equals("a")) {
             return 1;
@@ -560,7 +587,7 @@ public class Jogador extends javax.swing.JFrame {
 
         return 0;
     }
-
+    //devolve numero que corresponde a cada letra(tabuleiro secundario)
     public int stringNumero2(String letra) {
         if (letra.equals("i")) {
             return 0;
@@ -577,7 +604,7 @@ public class Jogador extends javax.swing.JFrame {
 
         return -1;
     }
-
+    //coloca em array o tipo e cor da peça
     public int[] tipoCorF(String peca) {
         int[] tipocor = new int[2];
         tipocor[0] = Integer.parseInt("" + peca.charAt(1));
