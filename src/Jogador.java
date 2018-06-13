@@ -18,6 +18,8 @@ import java.util.Calendar;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -546,7 +548,13 @@ public class Jogador extends javax.swing.JFrame {
     }
 
     //valida se ip é valido
+    
     private static boolean validation(String ip) {
+        Pattern p = Pattern.compile("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+        Matcher m = p.matcher(ip);
+        return m.find();
+    }
+    /*private static boolean validation(String ip) {
         //verificar se a string é valida ou não
         if (ip == null || ip.isEmpty()) {
             return false;
@@ -585,9 +593,9 @@ public class Jogador extends javax.swing.JFrame {
             //System.out.println("IP valido\n");
             return true;
         }
-    }
+    }*/
+    
     //retorna o numero que corresponde a cada letra (tabuleiro principar)
-
     public int stringNumero(String letra) {
         if (letra.equals("a")) {
             return 1;
