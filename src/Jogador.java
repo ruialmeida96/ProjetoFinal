@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.rmi.Naming;
 import java.rmi.NotBoundException;
 
 import java.rmi.RemoteException;
@@ -729,11 +730,13 @@ public class Jogador extends javax.swing.JFrame {
                         //InterfaceJogadores rem =(InterfaceJogadores) UnicastRemoteObject.exportObject(client,1099);
                         client = new ExtendeUnicast(this);
                         reg.rebind("jogador1", client);//indentificador do cliente remoto
+                         
                         //procura os objetos remotos registados, ao qual nos podemos ligar
                         objRemoto = (InterfaceXadrez) reg.lookup("jogador");           //pedir opcao
 
                         eu = new JogadorCaracteristicas(nome, 0, client, objRemoto, 0);
                         eu = objRemoto.Jogador(eu);
+                        
                         if (eu.getIndex() != -1) {
                             tipoCor = objRemoto.devolveArrayPrincipal();
                             tipoCorTabuleiroFantasma = objRemoto.devolveArrayFora();
@@ -758,8 +761,9 @@ public class Jogador extends javax.swing.JFrame {
                                     }
                                 }
                             });
+                        }else{
+                               JOptionPane.showMessageDialog(null, "Já existe utilizador com esse nome, utilize outro.", "" + "Aviso", JOptionPane.INFORMATION_MESSAGE);
                         }
-                        System.out.println("avisa utilizador que nome já está ocupado");
                         //avisa utilizador que nome já está ocupado
                     }else{
                         JOptionPane.showMessageDialog(null, "Introduza um nome válido", "" + "Aviso", JOptionPane.INFORMATION_MESSAGE);
@@ -772,8 +776,8 @@ public class Jogador extends javax.swing.JFrame {
             }
         } catch (Exception e) {
             //Mensagem de aviso-introduz os dados!!
-            JOptionPane.showMessageDialog(null, "Introduza os dados necessarios para efetuar conexão", "" + "Aviso", JOptionPane.INFORMATION_MESSAGE);
-            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Introduza os dados validos para se conectar ao servidor!", "" + "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            
         }
 
 
